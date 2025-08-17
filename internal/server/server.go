@@ -3,10 +3,12 @@ package server
 import (
 	"log"
 	"net/http"
+
+	"github.com/DustinMeyer1010/TimeWarp/internal/router"
 )
 
 func Start() {
-	router := createRouter()
+	router := router.CreateRouter()
 
 	server := &http.Server{
 		Addr:    "localhost:5000",

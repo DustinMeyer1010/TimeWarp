@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 )
@@ -22,7 +21,6 @@ func CreateAccount(account types.Account) error {
 	)
 
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 

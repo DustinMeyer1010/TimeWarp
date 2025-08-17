@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -14,37 +13,26 @@ import (
 func Login(w http.ResponseWriter, r *http.Request) {
 	var account types.Account
 
-	err := json.NewDecoder(r.Body).Decode(&account)
-
-	if err != nil {
-		http.Error(w, "unable to parse body", http.StatusBadRequest)
+	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
+		http.Error(w, "Invalid body", http.StatusBadRequest)
 		return
 	}
 
 	foundAccount, err := db.GetAccountByUsername(account.Username)
 
-	fmt.Println(foundAccount)
 	if err != nil {
-		http.Error(w, "Failed to add to db", http.StatusBadRequest)
+		http.Error(w, "Accouont not found", http.StatusBadRequest)
 		return
 	}
 
 	if !foundAccount.CheckPassword(account) {
-		http.Error(w, "invalid password", http.StatusBadRequest)
+		http.Error(w, "Invalid password", http.StatusBadRequest)
 		return
 	}
 
-	token, err := utils.GenerateJWTAccessToken(account.Username)
+	token, _ := utils.GenerateJWTAccessToken(account.Username) // errors are ignored since this would be configuration error
 
-	if err != nil {
-		fmt.Println("Failed to generate token: ", err)
-	}
-
-	refreshToken, err := utils.GenerateRefreshToken(account.Username)
-
-	if err != nil {
-		fmt.Println("Failed to generate token: ", err)
-	}
+	refreshToken, _ := utils.GenerateRefreshToken(account.Username) // errors are ignored since this would be configuration error
 
 	refreshTokenCookie := http.Cookie{
 		Name:     "refresh_token",
