@@ -12,8 +12,8 @@ func refreshRoutes(router *mux.Router) {
 	router.Handle("/refresh",
 		middleware.ChainMiddleware(
 			http.HandlerFunc(handler.RefreshToken),
-			middleware.Authorization,
-			middleware.RefreshToken,
+			middleware.VerifyRefreshToken,
+			middleware.GenerateJWTToken,
 		),
 	).Methods("GET")
 

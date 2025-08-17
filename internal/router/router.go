@@ -12,6 +12,7 @@ func CreateRouter() *mux.Router {
 		habitRoutes,
 		refreshRoutes,
 	)
+
 	return router
 }
 

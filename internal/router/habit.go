@@ -1,10 +1,19 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/DustinMeyer1010/TimeWarp/internal/handler"
+	"github.com/DustinMeyer1010/TimeWarp/internal/middleware"
 	"github.com/gorilla/mux"
 )
 
 func habitRoutes(router *mux.Router) {
-	router.HandleFunc("/create/habit", handler.CreateHabit).Methods("POST")
+	router.Handle("/create/habit",
+		middleware.ChainMiddleware(
+			http.HandlerFunc(handler.CreateHabit),
+			middleware.Authorization,
+		),
+	).Methods("POST")
+
 }

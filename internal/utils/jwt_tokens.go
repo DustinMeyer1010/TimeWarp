@@ -12,9 +12,10 @@ var jwtRefreshKey = []byte("my_secret_key") // change later
 var accessTokenExperation = 1               // time in hours for expiration of token
 var refreshTokenExperation = 30 * 24        // time in hours for expiration refresh token
 
-func GenerateJWTAccessToken(username string) (string, error) {
+func GenerateJWTAccessToken(id int, username string) (string, error) {
 
 	claims := jwt.MapClaims{
+		"id":       id,
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * time.Duration(accessTokenExperation)).Unix(), //
 		"iat":      time.Now().Unix(),
@@ -77,8 +78,9 @@ func refreshKeyFunction(t *jwt.Token) (any, error) {
 	return jwtRefreshKey, nil
 }
 
-func GenerateRefreshToken(username string) (string, error) {
+func GenerateRefreshToken(id int, username string) (string, error) {
 	claims := jwt.MapClaims{
+		"id":       id,
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * time.Duration(refreshTokenExperation)).Unix(), //
 		"iat":      time.Now().Unix(),

@@ -12,11 +12,11 @@ func GetAccountByUsername(username string) (*types.Account, error) {
 
 	row := pool.QueryRow(
 		context.Background(),
-		"SELECT username, password FROM account WHERE username = $1",
+		"SELECT id, username, password FROM account WHERE username = $1",
 		username,
 	)
 
-	err := row.Scan(&account.Username, &account.Password)
+	err := row.Scan(&account.ID, &account.Username, &account.Password)
 
 	if err != nil {
 		return nil, err

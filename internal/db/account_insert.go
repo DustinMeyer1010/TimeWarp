@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 )
@@ -19,6 +20,8 @@ func CreateAccount(account types.Account) error {
 		"INSERT INTO account (username, password) VALUES ($1, $2)",
 		account.Username, account.Password,
 	)
+
+	fmt.Println(err)
 
 	if err != nil {
 		return err

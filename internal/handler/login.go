@@ -30,9 +30,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, _ := utils.GenerateJWTAccessToken(account.Username) // errors are ignored since this would be configuration error
+	token, _ := utils.GenerateJWTAccessToken(account.ID, account.Username) // errors are ignored since this would be configuration error
 
-	refreshToken, _ := utils.GenerateRefreshToken(account.Username) // errors are ignored since this would be configuration error
+	refreshToken, _ := utils.GenerateRefreshToken(account.ID, account.Username) // errors are ignored since this would be configuration error
 
 	refreshTokenCookie := http.Cookie{
 		Name:     "refresh_token",
