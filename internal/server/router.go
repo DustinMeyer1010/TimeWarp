@@ -11,6 +11,8 @@ func createRouter() *http.ServeMux {
 
 	mux.HandleFunc("/create/account", handler.CreateAccount)
 	mux.HandleFunc("/account/login", handler.Login)
+	mux.HandleFunc("/create/habit", handler.CreateHabit)
+	mux.HandleFunc("/refresh", handler.RefreshToken)
 
 	return mux
 }

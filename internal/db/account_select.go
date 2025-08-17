@@ -19,7 +19,7 @@ func GetAccountByUsername(username string) (*types.Account, error) {
 	err := row.Scan(&account.Username, &account.Password)
 
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	return &account, nil

@@ -9,7 +9,13 @@ import (
 
 func CreateAccount(account types.Account) error {
 
-	_, err := pool.Exec(
+	err := account.EncryptPassword()
+
+	if err != nil {
+		return err
+	}
+
+	_, err = pool.Exec(
 		context.Background(),
 		"INSERT INTO account (username, password) VALUES ($1, $2)",
 		account.Username, account.Password,

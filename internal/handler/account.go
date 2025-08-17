@@ -2,12 +2,20 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
+	"os"
+	"testing"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
 	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 )
+
+func TestMain(m *testing.M) {
+	db.Init()
+	code := m.Run()
+
+	os.Exit(code)
+}
 
 func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	var account types.Account
@@ -26,29 +34,4 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 
-}
-
-func Login(w http.ResponseWriter, r *http.Request) {
-	var account types.Account
-
-	err := json.NewDecoder(r.Body).Decode(&account)
-
-	if err != nil {
-		http.Error(w, "unable to parse body", http.StatusBadRequest)
-		return
-	}
-
-	foundAccount, err := db.GetAccountByUsername(account.Username)
-	if err != nil {
-		http.Error(w, "Failed to add to db", http.StatusBadRequest)
-		return
-	}
-
-	fmt.Println(foundAccount.Username, foundAccount.Password)
-	fmt.Println(account.Username, account.Password)
-
-	if !foundAccount.Verify(&account) {
-		http.Error(w, "invalid password", http.StatusBadRequest)
-		return
-	}
 }
