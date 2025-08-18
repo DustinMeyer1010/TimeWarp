@@ -54,7 +54,7 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := service.DeleteAccount(id, claims.Username); err != nil {
-		http.Error(w, "Account not deleted"+err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
