@@ -7,17 +7,20 @@ import (
 )
 
 type Claims struct {
-	ID         float64
+	ID         int
 	Username   string
 	Experation float64
 	IAT        float64
+	jwt.RegisteredClaims
 }
 
 func CreateClaims(claims jwt.MapClaims) (*Claims, error) {
 	newClaims := Claims{}
 	var ok bool
 
-	if newClaims.ID, ok = claims["id"].(float64); !ok {
+	fmt.Println(claims["id"].(int))
+
+	if newClaims.ID, ok = claims["id"].(int); !ok {
 		return nil, fmt.Errorf("error for id parse")
 	}
 	if newClaims.Username, ok = claims["username"].(string); !ok {

@@ -14,6 +14,8 @@ func DeleteAccount(id int, requestor_username string) error {
 		return err
 	}
 
+	fmt.Println(err)
+
 	if requestor_username != foundAccount.Username {
 		return fmt.Errorf("username do not match")
 	}

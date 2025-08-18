@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
+	"github.com/DustinMeyer1010/TimeWarp/internal/middleware"
 	"github.com/DustinMeyer1010/TimeWarp/internal/service"
 	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 	"github.com/gorilla/mux"
@@ -38,7 +39,12 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteAccount(w http.ResponseWriter, r *http.Request) {
-	token_username := r.Context().Value("username").(string)
+	claims, ok := r.Context().Value(middleware.ContextKey("claims")).(types.Claims)
+
+	if !ok {
+		http.Error(w, "invalid token", http.StatusBadRequest)
+		return
+	}
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 
@@ -47,8 +53,8 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := service.DeleteAccount(id, token_username); err != nil {
-		http.Error(w, "Account not deleted", http.StatusInternalServerError)
+	if err := service.DeleteAccount(id, claims.Username); err != nil {
+		http.Error(w, "Account not deleted"+err.Error(), http.StatusInternalServerError)
 		return
 	}
 

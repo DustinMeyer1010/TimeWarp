@@ -24,21 +24,14 @@ func VerifyRefreshToken(next http.Handler) http.Handler {
 				return
 			}
 
-			claimsUnParsed, err := utils.VerifyRefreshToken(refreshToken.Value)
+			claims, err := utils.VerifyRefreshToken(refreshToken.Value)
 
 			if err != nil {
 				http.Error(w, "Invalid refresh token", http.StatusBadRequest)
 				return
 			}
 
-			claims, err := types.CreateClaims(claimsUnParsed)
-
-			if err != nil {
-				http.Error(w, "Claims parse failed"+err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			ctx := context.WithValue(r.Context(), ContextKey("claims"), *claims)
+			ctx := context.WithValue(r.Context(), ContextKey("claims"), claims)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})

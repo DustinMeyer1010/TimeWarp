@@ -34,7 +34,7 @@ func GetAccountByID(id int) (*types.Account, error) {
 		id,
 	)
 
-	err := row.Scan(account.ID, account.Username)
+	err := row.Scan(&account.ID, &account.Username)
 
 	if err != nil {
 		return nil, err

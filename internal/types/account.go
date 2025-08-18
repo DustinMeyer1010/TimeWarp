@@ -7,10 +7,11 @@ import (
 )
 
 type Account struct {
-	ID           float64 `json:"id"`
-	Username     string  `json:"username"`
-	Password     string  `json:"password"`
-	RefreshToken string  `json:"refresh_token"`
+	ID           int    `json:"id"`
+	Username     string `json:"username"`
+	Password     string `json:"password"`
+	Email        string `json:"email"`
+	RefreshToken string `json:"refresh_token"`
 }
 
 func (a *Account) CheckPassword(account Account) bool {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -12,10 +13,10 @@ var jwtRefreshKey = []byte("my_secret_key") // change later
 var accessTokenExperation = 1               // time in hours for expiration of token
 var refreshTokenExperation = 30 * 24        // time in hours for expiration refresh token
 
-func GenerateJWTAccessToken(id float64, username string) (string, error) {
+func GenerateJWTAccessToken(id int, username string) (string, error) {
 
 	claims := jwt.MapClaims{
-		"id":       id,
+		"id":       int(id),
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * time.Duration(accessTokenExperation)).Unix(), //
 		"iat":      time.Now().Unix(),
@@ -33,53 +34,46 @@ func GenerateJWTAccessToken(id float64, username string) (string, error) {
 
 }
 
-func VerifyAccessToken(tokenString string) (jwt.MapClaims, error) {
-	token, err := jwt.Parse(tokenString, accessKeyFunction)
+func VerifyAccessToken(tokenString string) (types.Claims, error) {
+
+	token, err := jwt.ParseWithClaims(tokenString, &types.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(jwtRefreshKey), nil
+	})
 
 	if err != nil {
-		return jwt.MapClaims{}, fmt.Errorf("error parsing token: %v", err)
+		return types.Claims{}, fmt.Errorf("invalid token")
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims, nil
+	claims, ok := token.Claims.(*types.Claims)
+	if !ok || !token.Valid {
+		return types.Claims{}, fmt.Errorf("invalid token")
 	}
 
-	return jwt.MapClaims{}, fmt.Errorf("invalid token")
+	return *claims, nil
 
 }
 
-func VerifyRefreshToken(tokenString string) (jwt.MapClaims, error) {
+func VerifyRefreshToken(tokenString string) (types.Claims, error) {
 
-	token, err := jwt.Parse(tokenString, refreshKeyFunction)
+	token, err := jwt.ParseWithClaims(tokenString, &types.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(jwtRefreshKey), nil
+	})
 
 	if err != nil {
-		return jwt.MapClaims{}, fmt.Errorf("error parsing token: %v", err)
+		return types.Claims{}, fmt.Errorf("invalid token")
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims, nil
+	claims, ok := token.Claims.(*types.Claims)
+	if !ok || !token.Valid {
+		return types.Claims{}, fmt.Errorf("invalid token")
 	}
 
-	return jwt.MapClaims{}, nil
+	return *claims, nil
 }
 
-func accessKeyFunction(t *jwt.Token) (any, error) {
-	if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-		return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
-	}
-	return jwtAccessKey, nil
-}
-
-func refreshKeyFunction(t *jwt.Token) (any, error) {
-	if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-		return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
-	}
-	return jwtRefreshKey, nil
-}
-
-func GenerateRefreshToken(id float64, username string) (string, error) {
+func GenerateRefreshToken(id int, username string) (string, error) {
 	claims := jwt.MapClaims{
-		"id":       id,
+		"id":       int(id),
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * time.Duration(refreshTokenExperation)).Unix(), //
 		"iat":      time.Now().Unix(),
