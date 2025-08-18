@@ -12,7 +12,7 @@ var jwtRefreshKey = []byte("my_secret_key") // change later
 var accessTokenExperation = 1               // time in hours for expiration of token
 var refreshTokenExperation = 30 * 24        // time in hours for expiration refresh token
 
-func GenerateJWTAccessToken(id int, username string) (string, error) {
+func GenerateJWTAccessToken(id float64, username string) (string, error) {
 
 	claims := jwt.MapClaims{
 		"id":       id,
@@ -24,8 +24,6 @@ func GenerateJWTAccessToken(id int, username string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	tokenString, err := token.SignedString(jwtAccessKey)
-
-	fmt.Println("err", err)
 
 	if err != nil {
 		return "", err
@@ -51,6 +49,7 @@ func VerifyAccessToken(tokenString string) (jwt.MapClaims, error) {
 }
 
 func VerifyRefreshToken(tokenString string) (jwt.MapClaims, error) {
+
 	token, err := jwt.Parse(tokenString, refreshKeyFunction)
 
 	if err != nil {
@@ -78,7 +77,7 @@ func refreshKeyFunction(t *jwt.Token) (any, error) {
 	return jwtRefreshKey, nil
 }
 
-func GenerateRefreshToken(id int, username string) (string, error) {
+func GenerateRefreshToken(id float64, username string) (string, error) {
 	claims := jwt.MapClaims{
 		"id":       id,
 		"username": username,

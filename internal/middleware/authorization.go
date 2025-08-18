@@ -10,7 +10,7 @@ import (
 	"github.com/DustinMeyer1010/TimeWarp/internal/utils"
 )
 
-type contextKey string
+type ContextKey string
 
 // Get Authorization token
 func Authorization(next http.Handler) http.Handler {
@@ -37,7 +37,7 @@ func Authorization(next http.Handler) http.Handler {
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), contextKey("claims"), claims)
+			ctx := context.WithValue(r.Context(), ContextKey("claims"), claims)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 
