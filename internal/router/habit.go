@@ -9,21 +9,21 @@ import (
 )
 
 func habitRoutes(router *mux.Router) {
-	router.Handle("/create/habit",
+	router.Handle("/habit",
 		middleware.ChainMiddleware(
 			http.HandlerFunc(handler.CreateHabit),
 			middleware.Authorization,
 		),
 	).Methods("POST")
 
-	router.Handle("/all/habit/{id}",
+	router.Handle("/account/habits/{id}",
 		middleware.ChainMiddleware(
 			http.HandlerFunc(handler.GetAllHabits),
 			middleware.Authorization,
 			middleware.VerifyIDWithToken,
 		)).Methods("GET")
 
-	router.Handle("/delete/habit/{id}",
+	router.Handle("/habit/{id}",
 		middleware.ChainMiddleware(
 			http.HandlerFunc(handler.DeleteHabit),
 			middleware.Authorization,

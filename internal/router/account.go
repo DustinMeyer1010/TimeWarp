@@ -9,9 +9,9 @@ import (
 )
 
 func accountRoutes(router *mux.Router) {
-	router.HandleFunc("/create/account", handler.CreateAccount).Methods("POST")
+	router.HandleFunc("/account", handler.CreateAccount).Methods("POST")
 
-	router.Handle("/delete/account/{id}",
+	router.Handle("/account/{id}",
 		middleware.ChainMiddleware(
 			http.HandlerFunc(handler.DeleteAccount),
 			middleware.Authorization,
