@@ -14,12 +14,8 @@ import (
 
 func CreateHabit(w http.ResponseWriter, r *http.Request) {
 	var habit types.Habit
-	claims, ok := r.Context().Value(middleware.ContextKey("claims")).(types.Claims)
 
-	if !ok {
-		http.Error(w, "invalid token", http.StatusBadRequest)
-		return
-	}
+	claims := r.Context().Value(middleware.ContextKey("claims")).(types.Claims)
 
 	if err := json.NewDecoder(r.Body).Decode(&habit); err != nil {
 		http.Error(w, "invalid body", http.StatusBadRequest)

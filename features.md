@@ -21,3 +21,8 @@ Visualize your progress at a glance with a daily heatmap.
 - Each day shows whether habits were completed or missed
 - Darker spots mean the habit was completed multiple times
 - Makes it easy to spot streaks and gaps in your routine
+
+
+# Todo's
+
+Implement habits features but the only difference is that these can only be achieve once and then go away forever.

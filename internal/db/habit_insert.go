@@ -7,11 +7,22 @@ import (
 )
 
 func CreateHabit(habit types.Habit) error {
+	var habit_id int
 
-	_, err := pool.Exec(
+	err := pool.QueryRow(
 		context.Background(),
-		"INSERT INTO habit (name, description, account_id) values ($1, $2, $3)",
-		habit.Name, habit.Description, habit.Account_id,
+		"INSERT INTO habits (name, description, account_id, completion_time) VALUES ($1, $2, $3, $4) RETURNING id",
+		habit.Name, habit.Description, habit.Account_id, habit.CompletionTime,
+	).Scan(&habit_id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = pool.Exec(
+		context.Background(),
+		"INSERT INTO habits_time_logs (task_id) VALUES ($1)",
+		habit_id,
 	)
 
 	if err != nil {
