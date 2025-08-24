@@ -10,15 +10,15 @@ CREATE TABLE IF NOT EXISTS habits (
 
 CREATE TABLE IF NOT EXISTS habits_time_logs (
     id SERIAL PRIMARY KEY,
-    task_id INT NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
+    habit_id INT NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
     day DATE NOT NULL DEFAULT CURRENT_DATE,
     time_spent INTERVAL NOT NULL DEFAULT '0 hours 0 minutes',
-    UNIQUE(task_id, day)
+    UNIQUE(habit_id, day)
 );
 
 CREATE TABLE IF NOT EXISTS habits_completed (
     id SERIAL PRIMARY KEY,
-    task_id INT NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
+    habit_id INT NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
     time_log_id INT NOT NULL REFERENCES habits_time_logs(id) ON DELETE CASCADE,
     completion_date TIMESTAMP NOT NULL DEFAULT NOW()
 );
