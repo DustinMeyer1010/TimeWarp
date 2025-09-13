@@ -6,7 +6,7 @@ import (
 )
 
 func CreateHabit(habit types.Habit, claims types.Claims) error {
-	habit.Account_id = claims.ID
+	habit.AccountID = claims.ID
 
 	return db.CreateHabit(habit)
 }

@@ -9,8 +9,22 @@ type Habit struct {
 	ID             int      `json:"id"`
 	Name           string   `json:"name"`
 	Description    string   `json:"description"`
-	Account_id     int      `json:"account_id"`
+	AccountID      int      `json:"account_id"`
 	CompletionTime Duration `json:"completion_time"`
+}
+
+type HabitTimeLogs struct {
+	ID          int       `json:"id"`
+	HabitID     int       `json:"habit_id"`
+	CurrentTime time.Time `json:"current_time"`
+	TimeSpent   Duration  `json:"time_spent"`
+}
+
+type HabitCompleted struct {
+	ID             int       `json:"id"`
+	HabitID        int       `json:"habit_id"`
+	TimeLogID      int       `json:"time_log_id"`
+	CompletionTime time.Time `json:"completion_date"`
 }
 
 type Duration struct {

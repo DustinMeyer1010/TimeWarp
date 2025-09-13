@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
 	"github.com/DustinMeyer1010/TimeWarp/internal/middleware"
@@ -79,5 +80,12 @@ func DeleteHabit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+}
+
+func TEST(w http.ResponseWriter, r *http.Request) {
+	now := time.Now()
+
+	db.CheckForCompletions(1, now)
 
 }

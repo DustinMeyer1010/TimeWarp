@@ -29,4 +29,6 @@ func habitRoutes(router *mux.Router) {
 			middleware.Authorization,
 		)).Methods("DELETE")
 
+	router.HandleFunc("/habit/test", handler.TEST)
+
 }

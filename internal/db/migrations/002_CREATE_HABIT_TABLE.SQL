@@ -11,14 +11,12 @@ CREATE TABLE IF NOT EXISTS habits (
 CREATE TABLE IF NOT EXISTS habits_time_logs (
     id SERIAL PRIMARY KEY,
     habit_id INT NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
-    day DATE NOT NULL DEFAULT CURRENT_DATE,
-    time_spent INTERVAL NOT NULL DEFAULT '0 hours 0 minutes',
-    UNIQUE(habit_id, day)
+    "current_time" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    time_spent INTERVAL NOT NULL DEFAULT '0 hours 0 minutes'
 );
 
 CREATE TABLE IF NOT EXISTS habits_completed (
     id SERIAL PRIMARY KEY,
     habit_id INT NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
-    time_log_id INT NOT NULL REFERENCES habits_time_logs(id) ON DELETE CASCADE,
-    completion_date TIMESTAMP NOT NULL DEFAULT NOW()
+    completion_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
