@@ -86,6 +86,6 @@ func DeleteHabit(w http.ResponseWriter, r *http.Request) {
 func TEST(w http.ResponseWriter, r *http.Request) {
 	now := time.Now()
 
-	db.CheckForCompletions(1, now)
+	db.UpdateCompletion(1, now)
 
 }

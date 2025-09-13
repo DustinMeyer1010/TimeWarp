@@ -36,7 +36,7 @@ func CreateHabitLog(timespent types.Duration, habitID int, date time.Time) error
 		return err
 	}
 
-	err = CheckForCompletions(habitID, date)
+	err = UpdateCompletion(habitID, date)
 
 	if err != nil {
 		return err
@@ -45,115 +45,7 @@ func CreateHabitLog(timespent types.Duration, habitID int, date time.Time) error
 	return nil
 }
 
-func CheckForCompletions(habitID int, date time.Time) error {
-
-	timeSpent, err := GetTotalTimeSpentOnDate(habitID, date)
-
-	if err != nil {
-		return err
-	}
-
-	completionTime, err := GetCompletionTimeForHabit(habitID)
-
-	if err != nil {
-		return err
-	}
-
-	newTotalCompletions := int(timeSpent.Seconds() / completionTime.Seconds())
-	completionCount, err := GetHabitCompletionCountOnDate(habitID, date)
-
-	if err != nil {
-		return err
-	}
-
-	println(completionCount, newTotalCompletions)
-
-	if completionCount > newTotalCompletions {
-		err := RemoveExtraCompletion(habitID, date, completionCount-newTotalCompletions)
-
-		if err != nil {
-			return err
-		}
-	} else {
-		err := AddCompletionForHabit(habitID, date, newTotalCompletions-completionCount)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func GetTotalTimeSpentOnDate(habitID int, date time.Time) (time.Duration, error) {
-	var timeSpent time.Duration
-
-	err := pool.QueryRow(
-		context.Background(),
-		`SELECT SUM(time_spent) FROM habits_time_logs WHERE habit_id = $1 AND DATE("current_time") = DATE($2)`,
-		habitID, date,
-	).Scan(&timeSpent)
-
-	if err != nil {
-		return 0, err
-	}
-
-	return timeSpent, nil
-}
-
-func GetCompletionTimeForHabit(habitID int) (time.Duration, error) {
-	var completionTime time.Duration
-
-	err := pool.QueryRow(
-		context.Background(),
-		"SELECT completion_time FROM habits WHERE id = $1",
-		habitID,
-	).Scan(&completionTime)
-
-	if err != nil {
-		return 0, nil
-	}
-
-	return completionTime, nil
-}
-
-func GetHabitCompletionCountOnDate(habitID int, date time.Time) (int, error) {
-	var completionCount int
-
-	err := pool.QueryRow(
-		context.Background(),
-		"SELECT COUNT(*) FROM habits_completed WHERE habit_id = $1 AND DATE(completion_date) = DATE($2)",
-		habitID, date,
-	).Scan(&completionCount)
-
-	if err != nil {
-		return 0, err
-	}
-
-	return completionCount, nil
-}
-
-func RemoveExtraCompletion(habitID int, date time.Time, extraCompletionCount int) error {
-	_, err := pool.Exec(
-		context.Background(),
-		`DELETE FROM habits_completed
-				WHERE id IN (
-					SELECT id
-					FROM habits_completed
-					WHERE habit_id = $1
-					AND completion_date = DATE($2)
-					ORDER BY id ASC
-					LIMIT $3
-				)
-				RETURNING id;`,
-		habitID, date, extraCompletionCount,
-	)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func AddCompletionForHabit(habitID int, date time.Time, addCount int) error {
+func CreateCompletionForHabit(habitID int, date time.Time, addCount int) error {
 	for i := 0; i < addCount; i++ {
 		_, err := pool.Exec(
 			context.Background(),
