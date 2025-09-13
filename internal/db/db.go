@@ -16,7 +16,7 @@ func Init() error {
 	pool, err = pgxpool.New(context.Background(), connStr)
 
 	if err != nil {
-		log.Fatal("unable to create Postgres pool: %v", err)
+		log.Fatalf("unable to create Postgres pool: %v", err)
 	}
 
 	pool.Config().MaxConns = 25
@@ -25,7 +25,7 @@ func Init() error {
 	err = pool.Ping(context.Background())
 
 	if err != nil {
-		log.Fatal("unable to ping database: %v", err)
+		log.Fatalf("unable to ping database: %v", err)
 	}
 
 	log.Println("Postgres connection pool initialized")

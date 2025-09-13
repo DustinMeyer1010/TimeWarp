@@ -2,22 +2,23 @@ package db
 
 import "time"
 
+// Adjust the completion row amount base on updates to time logs and habit
 func UpdateCompletion(habitID int, date time.Time) error {
 
-	timeSpent, err := GetTotalTimeSpentOnHabit(habitID, date)
+	timeSpent, err := GetHabitTotalTimeSpent(habitID, date)
 
 	if err != nil {
 		return err
 	}
 
-	completionTime, err := GetCompletionTimeOnHabit(habitID)
+	completionTime, err := GetHabitCompletionTime(habitID)
 
 	if err != nil {
 		return err
 	}
 
 	newTotalCompletions := int(timeSpent.Seconds() / completionTime.Seconds())
-	completionCount, err := GetHabitCompletionCountOnDate(habitID, date)
+	completionCount, err := GetHabitCompletionCount(habitID, date)
 
 	if err != nil {
 		return err
@@ -30,7 +31,7 @@ func UpdateCompletion(habitID int, date time.Time) error {
 			return err
 		}
 	} else {
-		err := CreateCompletionForHabit(habitID, date, newTotalCompletions-completionCount)
+		err := CreateHabitCompletion(habitID, date, newTotalCompletions-completionCount)
 		if err != nil {
 			return err
 		}

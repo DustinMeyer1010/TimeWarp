@@ -7,6 +7,7 @@ import (
 	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 )
 
+// Add a single habit to the datebase
 func CreateHabit(habit types.Habit) error {
 	var habitID int
 
@@ -23,7 +24,8 @@ func CreateHabit(habit types.Habit) error {
 	return nil
 }
 
-func CreateHabitLog(timespent types.Duration, habitID int, date time.Time) error {
+// Add a single habit log to the datebase
+func CreateHabitTimeLog(timespent types.Duration, habitID int, date time.Time) error {
 	var HabitsTimeLogs int
 
 	err := pool.QueryRow(
@@ -45,8 +47,9 @@ func CreateHabitLog(timespent types.Duration, habitID int, date time.Time) error
 	return nil
 }
 
-func CreateCompletionForHabit(habitID int, date time.Time, addCount int) error {
-	for i := 0; i < addCount; i++ {
+// Given a number of completions times it will add that many completions rows to completion table for hibit and date
+func CreateHabitCompletion(habitID int, date time.Time, timesCompleted int) error {
+	for i := 0; i < timesCompleted; i++ {
 		_, err := pool.Exec(
 			context.Background(),
 			"INSERT INTO habits_completed (habit_id, completion_date) VALUES ($1, $2)",

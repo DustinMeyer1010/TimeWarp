@@ -5,6 +5,9 @@ import (
 	"time"
 )
 
+// Given id for both account and habit and it will delete habit.
+// WARNING: will cascade delete all related information
+// Time logs and completions logs will be deleted when habit is removed
 func DeleteHabit(habitID int, accountID int) error {
 
 	_, err := pool.Exec(
@@ -16,6 +19,8 @@ func DeleteHabit(habitID int, accountID int) error {
 	return err
 }
 
+// If time logs or habits times are updated and completion are higher than they should
+// this function will remove all extra completion for specific day
 func DeleteExtraHabitCompletion(habitID int, date time.Time, extraCompletionCount int) error {
 	_, err := pool.Exec(
 		context.Background(),
@@ -38,6 +43,8 @@ func DeleteExtraHabitCompletion(habitID int, date time.Time, extraCompletionCoun
 	return nil
 }
 
+// Removes single time log from database
+// Automatically updates completion table
 func DeleteHabitTimeLogs(timeLogID int) error {
 	var habitID int
 	var date time.Time

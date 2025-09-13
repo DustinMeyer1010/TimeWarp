@@ -7,13 +7,14 @@ import (
 	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 )
 
-// @parameters id - User id to find the habits for
-func GetAllHabitsForUser(id int) (habits []types.Habit, err error) {
+// Pulls all habits related for a single users
+func GetAllHabitsForUser(UserID int) (habits []types.Habit, err error) {
 
 	rows, err := pool.Query(
 		context.Background(),
 		"SELECT * FROM habit WHERE account_id = $1",
-		id)
+		UserID,
+	)
 
 	if err != nil {
 		return nil, err
@@ -29,11 +30,8 @@ func GetAllHabitsForUser(id int) (habits []types.Habit, err error) {
 	return
 }
 
-func GetAllHabitLogForDay(id int, day time.Time) (habits []types.Habit, err error) {
-	return
-}
-
-func GetTotalTimeSpentOnHabit(habitID int, date time.Time) (time.Duration, error) {
+// Gets all the time spent for habit on a given day
+func GetHabitTotalTimeSpent(habitID int, date time.Time) (time.Duration, error) {
 	var timeSpent time.Duration
 
 	err := pool.QueryRow(
@@ -49,7 +47,8 @@ func GetTotalTimeSpentOnHabit(habitID int, date time.Time) (time.Duration, error
 	return timeSpent, nil
 }
 
-func GetCompletionTimeOnHabit(habitID int) (time.Duration, error) {
+// Retrives the completion time for a specific habit
+func GetHabitCompletionTime(habitID int) (time.Duration, error) {
 	var completionTime time.Duration
 
 	err := pool.QueryRow(
@@ -65,7 +64,8 @@ func GetCompletionTimeOnHabit(habitID int) (time.Duration, error) {
 	return completionTime, nil
 }
 
-func GetHabitCompletionCountOnDate(habitID int, date time.Time) (int, error) {
+// Retrives the current number of completion for habit on given day
+func GetHabitCompletionCount(habitID int, date time.Time) (int, error) {
 	var completionCount int
 
 	err := pool.QueryRow(
