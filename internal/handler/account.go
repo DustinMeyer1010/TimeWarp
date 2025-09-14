@@ -3,23 +3,13 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
-	"os"
 	"strconv"
-	"testing"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/db"
 	"github.com/DustinMeyer1010/TimeWarp/internal/middleware"
 	"github.com/DustinMeyer1010/TimeWarp/internal/service"
 	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 	"github.com/gorilla/mux"
 )
-
-func TestMain(m *testing.M) {
-	db.Init()
-	code := m.Run()
-
-	os.Exit(code)
-}
 
 func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	var account types.Account

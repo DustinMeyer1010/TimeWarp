@@ -1,6 +1,0 @@
-Create a habit
-Update a habit
-Delete a habit
-Create a habit time log
-Update a habit time log
-Delete a habit time log

@@ -16,7 +16,7 @@ func habitRoutes(router *mux.Router) {
 		),
 	).Methods("POST")
 
-	router.Handle("/account/habits/{id}",
+	router.Handle("/habits/{id}",
 		middleware.ChainMiddleware(
 			http.HandlerFunc(handler.GetAllHabits),
 			middleware.Authorization,
