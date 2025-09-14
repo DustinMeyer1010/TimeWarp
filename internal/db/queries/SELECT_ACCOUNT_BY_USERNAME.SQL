@@ -1,0 +1,1 @@
+SELECT id, username, password FROM account WHERE username = $1

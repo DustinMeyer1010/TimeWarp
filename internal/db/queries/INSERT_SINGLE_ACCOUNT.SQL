@@ -1,0 +1,1 @@
+INSERT INTO account (username, password, email, creation_date) VALUES ($1, $2, $3, $4)
