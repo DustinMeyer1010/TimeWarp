@@ -8,7 +8,7 @@ import (
 func CreateHabit(habit types.Habit, claims types.Claims) error {
 	habit.AccountID = claims.ID
 
-	return db.CreateHabit(habit)
+	return db.CreateHabitWithTime(habit)
 }
 
 func DeleteHabit(id int, account_id int) error {

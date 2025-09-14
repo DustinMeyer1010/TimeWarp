@@ -8,7 +8,7 @@ import (
 )
 
 // Add a single habit to the datebase
-func CreateHabit(habit types.Habit) error {
+func CreateHabitWithTime(habit types.Habit) error {
 	var habitID int
 
 	err := pool.QueryRow(
