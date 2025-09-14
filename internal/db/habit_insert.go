@@ -49,6 +49,7 @@ func CreateHabitTimeLog(timespent types.Duration, habitID int, date time.Time) e
 
 // Given a number of completions times it will add that many completions rows to completion table for hibit and date
 func CreateHabitCompletion(habitID int, date time.Time, timesCompleted int) error {
+	println(timesCompleted)
 	for i := 0; i < timesCompleted; i++ {
 		_, err := pool.Exec(
 			context.Background(),

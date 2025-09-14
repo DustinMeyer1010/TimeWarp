@@ -4,12 +4,33 @@ import (
 	"bytes"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
 	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/utils"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestMain(m *testing.M) {
+	utils.LoadEnvFile()
+	dbConfig, err := db.LoadDatabaseConfig("tst")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = dbConfig.Init()
+
+	if err != nil {
+		panic("unable to load database")
+	}
+
+	code := m.Run()
+
+	os.Exit(code)
+}
 
 func TestCreateAccount_Success(t *testing.T) {
 	account := types.Account{
