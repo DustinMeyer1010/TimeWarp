@@ -19,7 +19,7 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := service.CreateAccount(account); err != nil {
+	if _, err := service.CreateAccount(account); err != nil {
 		http.Error(w, "Failed to add to db", http.StatusBadRequest)
 		return
 	}

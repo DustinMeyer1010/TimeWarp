@@ -24,6 +24,6 @@ func DeleteAccount(id int, requestor_username string) error {
 
 }
 
-func CreateAccount(account types.Account) error {
+func CreateAccount(account types.Account) (int, error) {
 	return db.CreateAccount(account)
 }
