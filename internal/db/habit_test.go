@@ -1,7 +1,6 @@
 package db
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"testing"
@@ -23,15 +22,13 @@ func TestMain(m *testing.M) {
 	dbConfig, err := LoadDatabaseConfig("tst")
 
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("current", err)
 		os.Exit(1)
 	}
 
 	err = dbConfig.Init()
 
-	ClearTables("account")
-	println("here")
-	CreateAccount(Account)
+	ClearAllTables()
 
 	if err != nil {
 		fmt.Println(err)
@@ -48,22 +45,10 @@ func TestGetHabitWithTimeValid(t *testing.T) {
 }
 
 func TestCreateHabitWithTimeValid(t *testing.T) {
-	/*
-		habit := types.Habit{
-			Name:        "test",
-			Description: "Test Description",
-			AccountID:   1,
-		}
-		print(habit)
-	*/
-}
-
-func ClearTables(tableNames ...string) {
-	for _, name := range tableNames {
-		query := fmt.Sprintf("TRUNCATE TABLE %s", name)
-		pool.Exec(
-			context.Background(),
-			query)
+	habit := types.Habit{
+		Name:        "test",
+		Description: "Test Description",
+		AccountID:   1,
 	}
-
+	print(habit.Name)
 }
