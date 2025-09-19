@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/DustinMeyer1010/TimeWarp/internal/utils"
 )
 
@@ -41,7 +41,7 @@ func GenerateJWTToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 
-			claims, ok := r.Context().Value(ContextKey("claims")).(types.Claims)
+			claims, ok := r.Context().Value(ContextKey("claims")).(models.Claims)
 
 			if !ok {
 				http.Error(w, "Failed to parse claims", http.StatusInternalServerError)

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -85,6 +86,7 @@ func DeleteHabit(w http.ResponseWriter, r *http.Request) {
 
 func TEST(w http.ResponseWriter, r *http.Request) {
 	now := time.Now()
+	fmt.Println("here")
 
 	db.UpdateCompletion(1, now)
 

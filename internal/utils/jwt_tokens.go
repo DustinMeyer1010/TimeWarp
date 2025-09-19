@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -34,38 +34,38 @@ func GenerateJWTAccessToken(id int, username string) (string, error) {
 
 }
 
-func VerifyAccessToken(tokenString string) (types.Claims, error) {
+func VerifyAccessToken(tokenString string) (models.Claims, error) {
 
-	token, err := jwt.ParseWithClaims(tokenString, &types.Claims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &models.Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jwtRefreshKey), nil
 	})
 
 	if err != nil {
-		return types.Claims{}, fmt.Errorf("invalid token")
+		return models.Claims{}, fmt.Errorf("invalid token")
 	}
 
-	claims, ok := token.Claims.(*types.Claims)
+	claims, ok := token.Claims.(*models.Claims)
 	if !ok || !token.Valid {
-		return types.Claims{}, fmt.Errorf("invalid token")
+		return models.Claims{}, fmt.Errorf("invalid token")
 	}
 
 	return *claims, nil
 
 }
 
-func VerifyRefreshToken(tokenString string) (types.Claims, error) {
+func VerifyRefreshToken(tokenString string) (models.Claims, error) {
 
-	token, err := jwt.ParseWithClaims(tokenString, &types.Claims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &models.Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jwtRefreshKey), nil
 	})
 
 	if err != nil {
-		return types.Claims{}, fmt.Errorf("invalid token")
+		return models.Claims{}, fmt.Errorf("invalid token")
 	}
 
-	claims, ok := token.Claims.(*types.Claims)
+	claims, ok := token.Claims.(*models.Claims)
 	if !ok || !token.Valid {
-		return types.Claims{}, fmt.Errorf("invalid token")
+		return models.Claims{}, fmt.Errorf("invalid token")
 	}
 
 	return *claims, nil

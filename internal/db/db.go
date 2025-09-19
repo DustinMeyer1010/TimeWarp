@@ -59,7 +59,7 @@ func (c *Config) Init() error {
 		log.Fatalf("unable to ping database: %v", err)
 	}
 
-	createAllTables()
+	//createAllTables()
 
 	log.Println("Postgres connection pool initialized")
 

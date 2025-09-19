@@ -25,5 +25,6 @@ func main() {
 		fmt.Println(err)
 		os.Exit(0)
 	}
+
 	server.Start()
 }
