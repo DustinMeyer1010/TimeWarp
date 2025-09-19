@@ -49,7 +49,7 @@ func GetHabitCompletionTime(habitID int) (time.Duration, error) {
 
 	err := pool.QueryRow(
 		context.Background(),
-		"SELECT completion_time FROM habits WHERE id = $1",
+		"SELECT completion_time FROM habits_with_time WHERE id = $1",
 		habitID,
 	).Scan(&completionTime)
 
@@ -62,7 +62,7 @@ func GetHabitCompletionCount(habitID int, date time.Time) (int, error) {
 
 	err := pool.QueryRow(
 		context.Background(),
-		"SELECT COUNT(*) FROM habits_completed WHERE habit_id = $1 AND DATE(completion_date) = DATE($2)",
+		"SELECT COUNT(*) FROM habits_with_time_completed WHERE habit_id = $1 AND DATE(completion_date) = DATE($2)",
 		habitID, date,
 	).Scan(&completionCount)
 

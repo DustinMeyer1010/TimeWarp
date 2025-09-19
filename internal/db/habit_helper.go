@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -21,10 +22,16 @@ func UpdateCompletion(habitID int, date time.Time) error {
 
 	newTotalCompletions := int(timeSpent.Seconds() / completionTime.Seconds())
 
+	fmt.Println(newTotalCompletions)
+
 	completionCount, err := GetHabitCompletionCount(habitID, date)
 
 	if err != nil {
 		return err
+	}
+
+	if completionCount == 0 {
+		return nil
 	}
 
 	if completionCount > newTotalCompletions {
@@ -34,7 +41,6 @@ func UpdateCompletion(habitID int, date time.Time) error {
 			return err
 		}
 	} else {
-
 		err := CreateHabitCompletion(habitID, date, newTotalCompletions-completionCount)
 		if err != nil {
 			return err

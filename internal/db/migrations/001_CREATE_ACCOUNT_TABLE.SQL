@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS account(
     )
 );
 
-/* INSERT INTO account (username, email, password, creation_date) VALUES ('dustinmeyer', 'dustinmeyer10dm@gmail.com', '123', current_time); */
+/* INSERT INTO account (username, email, password, creation_date) VALUES ('dustinmeyer', 'dustinmeyer10dm@gmail.com', '123', current_timestamp); */
