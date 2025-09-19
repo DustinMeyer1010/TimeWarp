@@ -2,17 +2,25 @@ package db
 
 import "context"
 
-func DeleteAccount(username string) error {
+func DeleteAccountByUsername(username string) (int, error) {
+	var accountID int = -1
 
-	_, err := pool.Exec(
+	err := pool.QueryRow(
 		context.Background(),
 		"DELETE FROM account WHERE username=$1",
 		username,
-	)
+	).Scan(&accountID)
 
-	if err != nil {
-		return err
-	}
+	return accountID, err
+}
 
-	return nil
+func DeleteAccountById(id int) (int, error) {
+	var accountID int = -1
+	err := pool.QueryRow(
+		context.Background(),
+		"DELETE FROM account WHERE id=$1 RETURNING id",
+		id,
+	).Scan(&accountID)
+
+	return accountID, err
 }

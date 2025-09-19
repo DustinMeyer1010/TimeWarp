@@ -8,20 +8,20 @@ import (
 )
 
 // Add a single habit to the datebase
-func CreateHabitWithTime(habit types.Habit) error {
+func CreateHabitWithTime(habit types.Habit) (int, error) {
 	var habitID int
 
 	err := pool.QueryRow(
 		context.Background(),
-		"INSERT INTO habits (name, description, account_id, completion_time) VALUES ($1, $2, $3, $4) RETURNING id",
+		"INSERT INTO habits_with_time (name, description, account_id, completion_time) VALUES ($1, $2, $3, $4) RETURNING id",
 		habit.Name, habit.Description, habit.AccountID, habit.CompletionTime,
 	).Scan(&habitID)
 
 	if err != nil {
-		return err
+		return -1, err
 	}
 
-	return nil
+	return habitID, nil
 }
 
 // Add a single habit log to the datebase
@@ -49,7 +49,6 @@ func CreateHabitTimeLog(timespent types.Duration, habitID int, date time.Time) e
 
 // Given a number of completions times it will add that many completions rows to completion table for hibit and date
 func CreateHabitCompletion(habitID int, date time.Time, timesCompleted int) error {
-	println(timesCompleted)
 	for i := 0; i < timesCompleted; i++ {
 		_, err := pool.Exec(
 			context.Background(),
@@ -62,4 +61,15 @@ func CreateHabitCompletion(habitID int, date time.Time, timesCompleted int) erro
 	}
 
 	return nil
+}
+
+func CreateHabitWithoutTime(habit types.Habit) (int, error) {
+	var habitID int = -1
+	err := pool.QueryRow(
+		context.Background(),
+		"INSERT INTO habits_without_time (name, description, account_id) VALUES ($1, $2, $3) RETURNING id",
+		habit.Name, habit.Description, habit.AccountID,
+	).Scan(&habitID)
+
+	return habitID, err
 }

@@ -7,20 +7,18 @@ import (
 	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 )
 
-func DeleteAccount(id int, requestor_username string) error {
+func DeleteAccount(id int, requestor_username string) (int, error) {
 	foundAccount, err := db.GetAccountByID(id)
 
 	if err != nil {
-		return err
+		return -1, err
 	}
-
-	fmt.Println(err)
 
 	if requestor_username != foundAccount.Username {
-		return fmt.Errorf("Unauthorized")
+		return -1, fmt.Errorf("Unauthorized")
 	}
 
-	return db.DeleteAccount(foundAccount.Username)
+	return db.DeleteAccountByUsername(foundAccount.Username)
 
 }
 

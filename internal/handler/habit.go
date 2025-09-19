@@ -23,7 +23,7 @@ func CreateHabit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := service.CreateHabit(habit, claims); err != nil {
+	if _, err := service.CreateHabit(habit, claims); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

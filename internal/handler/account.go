@@ -43,7 +43,7 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := service.DeleteAccount(id, claims.Username); err != nil {
+	if _, err := service.DeleteAccount(id, claims.Username); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

@@ -8,12 +8,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// Check for a valid account creation with no alteration to any fields
 func TestCreateAccount(t *testing.T) {
 	var account types.Account = types.Account{
-		Username: "test_account",
+		Username: "test_valid_account_created",
 		Password: "123",
-		Email:    "test@test.com",
+		Email:    "single@account.com",
 	}
 	id, err := CreateAccount(account)
 
@@ -32,13 +31,13 @@ func TestCreateAccountMissingEmail(t *testing.T) {
 	assert.Equal(t, id, -1)
 	assert.Error(t, err)
 
-	assertAccountDoesNotExist(t, account.Username)
+	assertAccountDoesNotExistUsername(t, account.Username)
 
 }
 
 func TestCreateAccountInvalidEmail(t *testing.T) {
 	var account types.Account = types.Account{
-		Username: "test_account",
+		Username: "test_invalid_email",
 		Password: "123",
 		Email:    "local@test",
 	}
@@ -48,21 +47,21 @@ func TestCreateAccountInvalidEmail(t *testing.T) {
 	assert.Equal(t, id, -1)
 	assert.Error(t, err)
 
-	assertAccountDoesNotExist(t, account.Username)
+	assertAccountDoesNotExistUsername(t, account.Username)
 
 }
 
 func TestCreateAccountSameEmail(t *testing.T) {
 	var account types.Account = types.Account{
-		Username: "test_account1",
+		Username: "test_valid_account",
 		Password: "123",
-		Email:    "local@test.com",
+		Email:    "same@email.com",
 	}
 
 	var account1 types.Account = types.Account{
-		Username: "test_account",
+		Username: "test_invalid_email_exist",
 		Password: "123",
-		Email:    "local@test.com",
+		Email:    "same@email.com",
 	}
 
 	id, err := CreateAccount(account)
@@ -73,22 +72,22 @@ func TestCreateAccountSameEmail(t *testing.T) {
 	id, err = CreateAccount(account1)
 
 	assert.Equal(t, id, -1)
-	assert.NoError(t, err)
-	assertAccountDoesNotExist(t, account1.Username)
+	assert.Error(t, err)
+	assertAccountDoesNotExistUsername(t, account1.Username)
 }
 
 func TestCreateTwoDifferentAccounts(t *testing.T) {
 	var account types.Account = types.Account{
-		Username:     "test_account",
+		Username:     "test_valid1",
 		Password:     "123",
-		Email:        "local@test.com",
+		Email:        "wow@test.com",
 		RefreshToken: "",
 	}
 
 	var account1 types.Account = types.Account{
-		Username:     "test1_account",
+		Username:     "test_valid2",
 		Password:     "123",
-		Email:        "local@test1.com",
+		Email:        "bob@test1.com",
 		RefreshToken: "",
 	}
 
@@ -101,6 +100,70 @@ func TestCreateTwoDifferentAccounts(t *testing.T) {
 
 	assertAccountExist(t, id)
 	assert.NoError(t, err)
+}
+
+func TestMissingUsername(t *testing.T) {
+	var account types.Account = types.Account{
+		Username:     "",
+		Password:     "123",
+		Email:        "Missing@Username.com",
+		RefreshToken: "",
+	}
+
+	id, err := CreateAccount(account)
+
+	assert.Error(t, err)
+	assert.Equal(t, id, -1)
+
+}
+
+func TestGetAccountByIDExist(t *testing.T) {
+	var account types.Account = types.Account{
+		Username: "test_valid_id",
+		Password: "123",
+		Email:    "valid@account1.com",
+	}
+
+	id, err := CreateAccount(account)
+
+	assert.NoError(t, err)
+	assert.NotEqual(t, id, -1)
+
+	returnedAccount, err := GetAccountByID(id)
+
+	assert.NoError(t, err)
+	assertAccountsAreEqual(t, returnedAccount, account)
+
+}
+
+func TestGetAccountByIDNotExist(t *testing.T) {
+	DeleteAccountById(1)
+
+	returnedAccount, err := GetAccountByID(1)
+
+	assert.Error(t, err)
+	assertAccountIsEmpty(t, returnedAccount)
+}
+
+func TestDeleteAccountByIdExist(t *testing.T) {
+	var account types.Account = types.Account{
+		Username: "test_valid_id_to_be_deleted",
+		Password: "123",
+		Email:    "valid@account1tobedeleted.com",
+	}
+
+	id, err := CreateAccount(account)
+
+	assert.NoError(t, err)
+	assert.NotEqual(t, id, -1)
+
+	returnedId, err := DeleteAccountById(id)
+
+	assert.NoError(t, err)
+	assert.Equal(t, id, returnedId)
+
+	assertAccountDoesNotExistId(t, id)
+
 }
 
 // Takes two accounts and compare them to make sure they are the same account
@@ -125,8 +188,14 @@ func assertAccountIsEmpty(t *testing.T, account types.Account) {
 }
 
 // Check to make sure username does not exist inside of database
-func assertAccountDoesNotExist(t *testing.T, username string) {
+func assertAccountDoesNotExistUsername(t *testing.T, username string) {
 	account, err := GetAccountByUsername(username)
+	assertAccountIsEmpty(t, account)
+	assert.Error(t, err)
+}
+
+func assertAccountDoesNotExistId(t *testing.T, id int) {
+	account, err := GetAccountByID(id)
 	assertAccountIsEmpty(t, account)
 	assert.Error(t, err)
 }

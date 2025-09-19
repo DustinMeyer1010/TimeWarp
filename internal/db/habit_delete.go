@@ -8,11 +8,11 @@ import (
 // Given id for both account and habit and it will delete habit.
 // WARNING: will cascade delete all related information
 // Time logs and completions logs will be deleted when habit is removed
-func DeleteHabit(habitID int, accountID int) error {
+func DeleteHabitWithTime(habitID int, accountID int) error {
 
 	_, err := pool.Exec(
 		context.Background(),
-		"DELETE FROM habit WHERE id = $1 AND account_id = $2",
+		"DELETE FROM habits_with_time WHERE id = $1 AND account_id = $2",
 		habitID, accountID,
 	)
 
@@ -62,4 +62,15 @@ func DeleteHabitTimeLogs(timeLogID int) error {
 	}
 
 	return nil
+}
+
+func DeleteHabitWithoutTime(id, accountID int) (int, error) {
+	var returnedID int = -1
+	err := pool.QueryRow(
+		context.Background(),
+		"DELETE FROM habits_without_time WHERE id = $1 AND account_id = $2 RETURNING id",
+		id, accountID,
+	).Scan(&returnedID)
+
+	return returnedID, err
 }
