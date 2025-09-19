@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 )
 
 func DeleteAccount(id int, requestor_username string) (int, error) {
@@ -22,6 +22,6 @@ func DeleteAccount(id int, requestor_username string) (int, error) {
 
 }
 
-func CreateAccount(account types.Account) (int, error) {
+func CreateAccount(account models.Account) (int, error) {
 	return db.CreateAccount(account)
 }

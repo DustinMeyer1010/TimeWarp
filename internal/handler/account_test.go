@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/DustinMeyer1010/TimeWarp/internal/utils"
 	"github.com/stretchr/testify/assert"
 )
@@ -33,7 +33,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestCreateAccount_Success(t *testing.T) {
-	account := types.Account{
+	account := models.Account{
 		Username: "testUser",
 		Password: "123",
 	}

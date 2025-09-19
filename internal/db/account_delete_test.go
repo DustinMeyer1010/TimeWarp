@@ -3,14 +3,14 @@ package db
 import (
 	"testing"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/stretchr/testify/assert"
 )
 
 // Delete Account By ID (Account Exists | Valid)
 func TestDABI(t *testing.T) {
 	t.Logf("%s: Delete Account By ID", t.Name())
-	var account types.Account = types.Account{
+	var account models.Account = models.Account{
 		Username: "TestDABI",
 		Password: "123",
 		Email:    "test@DABI.com",
@@ -33,7 +33,7 @@ func TestDABI(t *testing.T) {
 // Delete Account By Username (Account Exists | Valid)
 func TestDABU(t *testing.T) {
 	t.Logf("%s: Delete Account By Username", t.Name())
-	var account types.Account = types.Account{
+	var account models.Account = models.Account{
 		Username: "TestDABU",
 		Password: "123",
 		Email:    "Test@DABU.com",

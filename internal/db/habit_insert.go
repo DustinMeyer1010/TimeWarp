@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 )
 
 // Add a single habit to the datebase
-func CreateHabitWithTime(habit types.Habit) (int, error) {
+func CreateHabitWithTime(habit models.Habit) (int, error) {
 	var habitID int
 
 	err := pool.QueryRow(
@@ -25,7 +25,7 @@ func CreateHabitWithTime(habit types.Habit) (int, error) {
 }
 
 // Add a single habit log to the datebase
-func CreateHabitTimeLog(timespent types.Duration, habitID int, date time.Time) error {
+func CreateHabitTimeLog(timespent models.Duration, habitID int, date time.Time) error {
 	var HabitsTimeLogs int
 
 	err := pool.QueryRow(
@@ -63,7 +63,7 @@ func CreateHabitCompletion(habitID int, date time.Time, timesCompleted int) erro
 	return nil
 }
 
-func CreateHabitWithoutTime(habit types.Habit) (int, error) {
+func CreateHabitWithoutTime(habit models.Habit) (int, error) {
 	var habitID int = -1
 	err := pool.QueryRow(
 		context.Background(),

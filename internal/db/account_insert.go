@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 )
 
 // CreateAccount attempts to create a new account in the database.
@@ -19,7 +19,7 @@ import (
 // Returns:
 //   - id: The ID of the newly created account, or -1 if the creation failed.
 //   - err: An error describing why the account could not be created, or nil if successful.
-func CreateAccount(account types.Account) (id int, err error) {
+func CreateAccount(account models.Account) (id int, err error) {
 	id = -1
 	err = account.EncryptPassword()
 

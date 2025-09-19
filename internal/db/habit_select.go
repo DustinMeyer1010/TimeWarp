@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 )
 
 // Pulls all habits related for a single users
-func GetAllHabitsForUser(UserID int) (habits []types.Habit, err error) {
+func GetAllHabitsForUser(UserID int) (habits []models.Habit, err error) {
 
 	rows, err := pool.Query(
 		context.Background(),
@@ -23,7 +23,7 @@ func GetAllHabitsForUser(UserID int) (habits []types.Habit, err error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var habit types.Habit
+		var habit models.Habit
 		rows.Scan(&habit.ID, &habit.Name, &habit.Description, &habit.AccountID)
 		habits = append(habits, habit)
 	}
@@ -69,8 +69,8 @@ func GetHabitCompletionCount(habitID int, date time.Time) (int, error) {
 	return completionCount, err
 }
 
-func GetHabitWithTime(id, accountID int) (types.Habit, error) {
-	var habit = types.Habit{}
+func GetHabitWithTime(id, accountID int) (models.Habit, error) {
+	var habit = models.Habit{}
 	var completionTime time.Duration = time.Duration(time.Second * 0)
 
 	err := pool.QueryRow(
@@ -83,13 +83,13 @@ func GetHabitWithTime(id, accountID int) (types.Habit, error) {
 		return habit, err
 	}
 
-	habit.CompletionTime = types.Duration{Duration: completionTime}
+	habit.CompletionTime = models.Duration{Duration: completionTime}
 
 	return habit, err
 }
 
-func GetHabitWithoutTime(id, accountID int) (types.Habit, error) {
-	var habit = types.Habit{}
+func GetHabitWithoutTime(id, accountID int) (models.Habit, error) {
+	var habit = models.Habit{}
 
 	err := pool.QueryRow(
 		context.Background(),

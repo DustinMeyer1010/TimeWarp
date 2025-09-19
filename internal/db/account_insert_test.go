@@ -3,14 +3,14 @@ package db
 import (
 	"testing"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/stretchr/testify/assert"
 )
 
 // Create Account (Valid)
 func TestCA(t *testing.T) {
 	t.Logf("%s: Create Account", t.Name())
-	var account types.Account = types.Account{
+	var account models.Account = models.Account{
 		Username: "TestCA",
 		Password: "123",
 		Email:    "test@CA.com",
@@ -24,7 +24,7 @@ func TestCA(t *testing.T) {
 // Create Account Missing Email (invalid)
 func TestCAME(t *testing.T) {
 	t.Logf("%s: Create Account Missing Email", t.Name())
-	var account types.Account = types.Account{
+	var account models.Account = models.Account{
 		Username: "TestCAME",
 		Password: "123",
 		Email:    "",
@@ -41,7 +41,7 @@ func TestCAME(t *testing.T) {
 // Create Account Invalid Email (invalid)
 func TestCAIE(t *testing.T) {
 	t.Logf("%s: Create Account Invalid Email", t.Name())
-	var account types.Account = types.Account{
+	var account models.Account = models.Account{
 		Username: "TestCAIE",
 		Password: "123",
 		Email:    "test@CAIE",
@@ -59,13 +59,13 @@ func TestCAIE(t *testing.T) {
 // Create Account Same Email
 func TestCASE(t *testing.T) {
 	t.Logf("%s: Create Account Same Email", t.Name())
-	var account types.Account = types.Account{
+	var account models.Account = models.Account{
 		Username: "TestCASE",
 		Password: "123",
 		Email:    "test@CASE.com",
 	}
 
-	var account1 types.Account = types.Account{
+	var account1 models.Account = models.Account{
 		Username: "TestCASE1",
 		Password: "123",
 		Email:    "test@CASE.com",
@@ -86,14 +86,14 @@ func TestCASE(t *testing.T) {
 // Create Two Different Accounts (valid)
 func TestCTDA(t *testing.T) {
 	t.Logf("%s: Create Two Different Accounts", t.Name())
-	var account types.Account = types.Account{
+	var account models.Account = models.Account{
 		Username:     "TestCTDA",
 		Password:     "123",
 		Email:        "test@CTDA.com",
 		RefreshToken: "",
 	}
 
-	var account1 types.Account = types.Account{
+	var account1 models.Account = models.Account{
 		Username:     "TestCTDA1",
 		Password:     "123",
 		Email:        "test@CTDA1.com",
@@ -114,7 +114,7 @@ func TestCTDA(t *testing.T) {
 // Create Account Missing Username (invalid)
 func TestCAMU(t *testing.T) {
 	t.Logf("%s: Create Account Missing Username", t.Name())
-	var account types.Account = types.Account{
+	var account models.Account = models.Account{
 		Username:     "",
 		Password:     "123",
 		Email:        "test@CAMU.com",

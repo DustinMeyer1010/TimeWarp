@@ -5,18 +5,31 @@ import (
 	"time"
 )
 
+type DeletedHabit struct {
+	HabitId   int
+	AccountId int
+}
+
+func NewDeletedHabit() DeletedHabit {
+	return DeletedHabit{
+		HabitId:   -1,
+		AccountId: -1,
+	}
+}
+
 // Given id for both account and habit and it will delete habit.
 // WARNING: will cascade delete all related information
 // Time logs and completions logs will be deleted when habit is removed
-func DeleteHabitWithTime(habitID int, accountID int) error {
+func DeleteHabitWithTime(habitId int, accountId int) (DeletedHabit, error) {
+	deletedHabit := NewDeletedHabit()
 
-	_, err := pool.Exec(
+	err := pool.QueryRow(
 		context.Background(),
-		"DELETE FROM habits_with_time WHERE id = $1 AND account_id = $2",
-		habitID, accountID,
-	)
+		"DELETE FROM habits_with_time WHERE id = $1 AND account_id = $2	RETURNING id, account_id",
+		habitId, accountId,
+	).Scan(&deletedHabit.HabitId, &deletedHabit.AccountId)
 
-	return err
+	return deletedHabit, err
 }
 
 // If time logs or habits times are updated and completion are higher than they should
@@ -64,13 +77,14 @@ func DeleteHabitTimeLogs(timeLogID int) error {
 	return nil
 }
 
-func DeleteHabitWithoutTime(id, accountID int) (int, error) {
-	var returnedID int = -1
+func DeleteHabitWithoutTime(id, accountID int) (DeletedHabit, error) {
+	deletedHabit := NewDeletedHabit()
+
 	err := pool.QueryRow(
 		context.Background(),
-		"DELETE FROM habits_without_time WHERE id = $1 AND account_id = $2 RETURNING id",
+		"DELETE FROM habits_without_time WHERE id = $1 AND account_id = $2 RETURNING id, account_id",
 		id, accountID,
-	).Scan(&returnedID)
+	).Scan(&deletedHabit.HabitId, &deletedHabit.AccountId)
 
-	return returnedID, err
+	return deletedHabit, err
 }

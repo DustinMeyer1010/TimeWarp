@@ -3,14 +3,14 @@ package db
 import (
 	"testing"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/stretchr/testify/assert"
 )
 
 // Get Account By Id Exists
 func TestGABIE(t *testing.T) {
 	t.Logf("%s: Get Account By Id Exists", t.Name())
-	var account types.Account = types.Account{
+	var account models.Account = models.Account{
 		Username: "TestGABIE",
 		Password: "123",
 		Email:    "test@GABIE.com",

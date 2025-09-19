@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,11 +12,11 @@ import (
 func TestGHWTC(t *testing.T) {
 	t.Logf("%s: Get Habit With Time Created", t.Name())
 
-	var habit types.Habit = types.Habit{
+	var habit models.Habit = models.Habit{
 		Name:           "Test",
 		Description:    "This is a valid habit",
 		AccountID:      Account1.ID,
-		CompletionTime: types.Duration{Duration: time.Hour * 1},
+		CompletionTime: models.Duration{Duration: time.Hour * 1},
 	}
 
 	id, err := CreateHabitWithTime(habit)
@@ -33,7 +33,7 @@ func TestGHWTC(t *testing.T) {
 // Get Habit Without Time Created
 func TestGHWOTC(t *testing.T) {
 	t.Logf("%s: Get Habit Without Time Not Created", t.Name())
-	var habit types.Habit = types.Habit{
+	var habit models.Habit = models.Habit{
 		Name:        "Test",
 		Description: "This is a valid habit",
 		AccountID:   Account1.ID,
@@ -78,11 +78,11 @@ func TestGHWOTNC(t *testing.T) {
 // Get Habit With Time Id And Account Not Matching
 func TestGHWTIAANM(t *testing.T) {
 	t.Logf("%s: Get Habit With Time Id And Account Not Matching", t.Name())
-	var habit types.Habit = types.Habit{
+	var habit models.Habit = models.Habit{
 		Name:           "Test",
 		Description:    "This is a valid habit",
 		AccountID:      Account1.ID,
-		CompletionTime: types.Duration{Duration: time.Hour * 1},
+		CompletionTime: models.Duration{Duration: time.Hour * 1},
 	}
 
 	id, err := CreateHabitWithTime(habit)
@@ -100,7 +100,7 @@ func TestGHWTIAANM(t *testing.T) {
 // Get Habit Without Time Id And Account Not Matching
 func TestGHWOTIAANM(t *testing.T) {
 	t.Logf("%s: Get Habit With Time Id And Account Not Matching", t.Name())
-	var habit types.Habit = types.Habit{
+	var habit models.Habit = models.Habit{
 		Name:        "Test",
 		Description: "This is a valid habit",
 		AccountID:   Account1.ID,

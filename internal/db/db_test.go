@@ -5,18 +5,18 @@ import (
 	"os"
 	"testing"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/DustinMeyer1010/TimeWarp/internal/utils"
 	"github.com/stretchr/testify/assert"
 )
 
-var Account1 types.Account = types.Account{
+var Account1 models.Account = models.Account{
 	Username: "Habit_Account1",
 	Password: "123",
 	Email:    "HabitAccount1@test.com",
 }
 
-var Account2 types.Account = types.Account{
+var Account2 models.Account = models.Account{
 	Username: "Habit_Account2",
 	Password: "123",
 	Email:    "HabitAccount2@test.com",
@@ -62,14 +62,14 @@ func TestMain(m *testing.M) {
 // Parameter:
 //   - account1: account found in the database with hashed password
 //   - account2: account used to store in database with unhashed password
-func assertAccountsAreEqual(t *testing.T, account1 types.Account, account2 types.Account) {
+func assertAccountsAreEqual(t *testing.T, account1 models.Account, account2 models.Account) {
 	assert.Equal(t, account1.Email, account2.Email)
 	assert.Equal(t, account1.Username, account2.Username)
 	assert.True(t, account1.CheckPassword(account2))
 }
 
 // Takes in an account and makes sure all the fields are empty/default values
-func assertAccountIsEmpty(t *testing.T, account types.Account) {
+func assertAccountIsEmpty(t *testing.T, account models.Account) {
 	assert.Equal(t, account.ID, 0)
 	assert.Equal(t, account.Username, "")
 	assert.Equal(t, account.Password, "")
@@ -101,7 +101,7 @@ func assertAccountExist(t *testing.T, id int) {
 }
 
 // Takes two habits and compares them to make sure they equal base on all values
-func assertHabitsAreEqual(t *testing.T, habit1, habit2 types.Habit) {
+func assertHabitsAreEqual(t *testing.T, habit1, habit2 models.Habit) {
 	assert.Equal(t, habit1.AccountID, habit2.AccountID)
 	assert.Equal(t, habit1.Name, habit2.Name)
 	assert.Equal(t, habit1.Description, habit2.Description)
@@ -109,7 +109,7 @@ func assertHabitsAreEqual(t *testing.T, habit1, habit2 types.Habit) {
 }
 
 // Takes a habit and makes sure that all values are empty/default
-func assertHabitIsEmpty(t *testing.T, habit types.Habit) {
+func assertHabitIsEmpty(t *testing.T, habit models.Habit) {
 	assert.Empty(t, habit.AccountID)
 	assert.Empty(t, habit.Name)
 	assert.Empty(t, habit.Description)

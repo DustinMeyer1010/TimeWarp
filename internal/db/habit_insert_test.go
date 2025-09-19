@@ -4,18 +4,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/stretchr/testify/assert"
 )
 
 // Create Habit With Time
 func TestCHWT(t *testing.T) {
 	t.Logf("%s: Create Habit With Time", t.Name())
-	var habit types.Habit = types.Habit{
+	var habit models.Habit = models.Habit{
 		Name:           "Test",
 		Description:    "This is a valid habit",
 		AccountID:      Account1.ID,
-		CompletionTime: types.Duration{Duration: time.Hour * 1},
+		CompletionTime: models.Duration{Duration: time.Hour * 1},
 	}
 
 	id, err := CreateHabitWithTime(habit)
@@ -27,11 +27,11 @@ func TestCHWT(t *testing.T) {
 // Create Same Habit Twice
 func TestCSHT(t *testing.T) {
 	t.Logf("%s: Create Same Habit Twice", t.Name())
-	var habit types.Habit = types.Habit{
+	var habit models.Habit = models.Habit{
 		Name:           "TwoHabits",
 		Description:    "This is a valid habit",
 		AccountID:      Account1.ID,
-		CompletionTime: types.Duration{Duration: time.Hour * 1},
+		CompletionTime: models.Duration{Duration: time.Hour * 1},
 	}
 	id, err := CreateHabitWithTime(habit)
 	assert.NoError(t, err)
@@ -48,7 +48,7 @@ func TestCSHT(t *testing.T) {
 // Create Habit Without Time
 func TestCHWOT(t *testing.T) {
 	t.Logf("%s: Create Same Habit Twice", t.Name())
-	var habit types.Habit = types.Habit{
+	var habit models.Habit = models.Habit{
 		Name:        "TwoHabits",
 		Description: "This is a valid habit",
 		AccountID:   Account1.ID,
