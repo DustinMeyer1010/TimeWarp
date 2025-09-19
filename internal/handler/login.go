@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/DustinMeyer1010/TimeWarp/internal/utils"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	var account types.Account
+	var account models.Account
 
 	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
 		http.Error(w, "Invalid body", http.StatusBadRequest)

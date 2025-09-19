@@ -3,12 +3,14 @@ package db
 import (
 	"context"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 )
 
-func GetAccountByUsername(username string) (*types.Account, error) {
+// Returns account ID, Username, Password for account matching username
+// If account not found returns empty account with error
+func GetAccountByUsername(username string) (models.Account, error) {
 
-	var account types.Account
+	var account models.Account
 
 	row := pool.QueryRow(
 		context.Background(),
@@ -19,26 +21,21 @@ func GetAccountByUsername(username string) (*types.Account, error) {
 	err := row.Scan(&account.ID, &account.Username, &account.Password)
 
 	if err != nil {
-		return nil, err
+		return models.Account{}, err
 	}
 
-	return &account, nil
+	return account, nil
 }
 
-func GetAccountByID(id int) (*types.Account, error) {
-	var account types.Account
+// Pulls account with the id given
+func GetAccountByID(id int) (models.Account, error) {
+	var account models.Account
 
-	row := pool.QueryRow(
+	err := pool.QueryRow(
 		context.Background(),
-		"SELECT id, username FROM account WHERE id = $1",
+		"SELECT id, username, email, password, creation_date FROM account WHERE id = $1",
 		id,
-	)
+	).Scan(&account.ID, &account.Username, &account.Email, &account.Password, &account.CreationDate)
 
-	err := row.Scan(&account.ID, &account.Username)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &account, nil
+	return account, err
 }

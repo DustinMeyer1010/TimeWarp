@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 )
 
 // Pulls all habits related for a single users
-func GetAllHabitsForUser(UserID int) (habits []types.Habit, err error) {
+func GetAllHabitsForUser(UserID int) (habits []models.Habit, err error) {
 
 	rows, err := pool.Query(
 		context.Background(),
@@ -23,7 +23,7 @@ func GetAllHabitsForUser(UserID int) (habits []types.Habit, err error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var habit types.Habit
+		var habit models.Habit
 		rows.Scan(&habit.ID, &habit.Name, &habit.Description, &habit.AccountID)
 		habits = append(habits, habit)
 	}
@@ -32,7 +32,7 @@ func GetAllHabitsForUser(UserID int) (habits []types.Habit, err error) {
 
 // Gets all the time spent for habit on a given day
 func GetHabitTotalTimeSpent(habitID int, date time.Time) (time.Duration, error) {
-	var timeSpent time.Duration
+	var timeSpent time.Duration = time.Duration(time.Second * 0)
 
 	err := pool.QueryRow(
 		context.Background(),
@@ -40,16 +40,12 @@ func GetHabitTotalTimeSpent(habitID int, date time.Time) (time.Duration, error) 
 		habitID, date,
 	).Scan(&timeSpent)
 
-	if err != nil {
-		return 0, err
-	}
-
-	return timeSpent, nil
+	return timeSpent, err
 }
 
 // Retrives the completion time for a specific habit
 func GetHabitCompletionTime(habitID int) (time.Duration, error) {
-	var completionTime time.Duration
+	var completionTime time.Duration = time.Duration(time.Second * 0)
 
 	err := pool.QueryRow(
 		context.Background(),
@@ -57,16 +53,12 @@ func GetHabitCompletionTime(habitID int) (time.Duration, error) {
 		habitID,
 	).Scan(&completionTime)
 
-	if err != nil {
-		return 0, nil
-	}
-
-	return completionTime, nil
+	return completionTime, err
 }
 
 // Retrives the current number of completion for habit on given day
 func GetHabitCompletionCount(habitID int, date time.Time) (int, error) {
-	var completionCount int
+	var completionCount int = 0
 
 	err := pool.QueryRow(
 		context.Background(),
@@ -74,9 +66,36 @@ func GetHabitCompletionCount(habitID int, date time.Time) (int, error) {
 		habitID, date,
 	).Scan(&completionCount)
 
+	return completionCount, err
+}
+
+func GetHabitWithTime(id, accountID int) (models.Habit, error) {
+	var habit = models.Habit{}
+	var completionTime time.Duration = time.Duration(time.Second * 0)
+
+	err := pool.QueryRow(
+		context.Background(),
+		"SELECT id, name, description, completion_time, account_id FROM habits_with_time WHERE id = $1 AND account_id = $2",
+		id, accountID,
+	).Scan(&habit.ID, &habit.Name, &habit.Description, &completionTime, &habit.AccountID)
+
 	if err != nil {
-		return 0, err
+		return habit, err
 	}
 
-	return completionCount, nil
+	habit.CompletionTime = models.Duration{Duration: completionTime}
+
+	return habit, err
+}
+
+func GetHabitWithoutTime(id, accountID int) (models.Habit, error) {
+	var habit = models.Habit{}
+
+	err := pool.QueryRow(
+		context.Background(),
+		"SELECT id, name, description, account_id FROM habits_without_time WHERE id = $1 AND account_id = $2",
+		id, accountID,
+	).Scan(&habit.ID, &habit.Name, &habit.Description, &habit.AccountID)
+
+	return habit, err
 }

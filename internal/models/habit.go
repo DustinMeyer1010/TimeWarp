@@ -1,4 +1,4 @@
-package types
+package models
 
 import (
 	"encoding/json"
@@ -42,4 +42,8 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 	}
 	d.Duration = dur
 	return nil
+}
+
+func (d *Duration) IsZero() bool {
+	return d.Duration == 0
 }

@@ -4,26 +4,24 @@ import (
 	"fmt"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 )
 
-func DeleteAccount(id int, requestor_username string) error {
+func DeleteAccount(id int, requestor_username string) (int, error) {
 	foundAccount, err := db.GetAccountByID(id)
 
 	if err != nil {
-		return err
+		return -1, err
 	}
-
-	fmt.Println(err)
 
 	if requestor_username != foundAccount.Username {
-		return fmt.Errorf("Unauthorized")
+		return -1, fmt.Errorf("Unauthorized")
 	}
 
-	return db.DeleteAccount(foundAccount.Username)
+	return db.DeleteAccountByUsername(foundAccount.Username)
 
 }
 
-func CreateAccount(account types.Account) error {
+func CreateAccount(account models.Account) (int, error) {
 	return db.CreateAccount(account)
 }

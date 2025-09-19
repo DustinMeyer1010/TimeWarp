@@ -8,22 +8,22 @@ import (
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
 	"github.com/DustinMeyer1010/TimeWarp/internal/middleware"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/DustinMeyer1010/TimeWarp/internal/service"
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 	"github.com/gorilla/mux"
 )
 
 func CreateHabit(w http.ResponseWriter, r *http.Request) {
-	var habit types.Habit
+	var habit models.Habit
 
-	claims := r.Context().Value(middleware.ContextKey("claims")).(types.Claims)
+	claims := r.Context().Value(middleware.ContextKey("claims")).(models.Claims)
 
 	if err := json.NewDecoder(r.Body).Decode(&habit); err != nil {
 		http.Error(w, "invalid body", http.StatusBadRequest)
 		return
 	}
 
-	if err := service.CreateHabit(habit, claims); err != nil {
+	if _, err := service.CreateHabit(habit, claims); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -33,7 +33,7 @@ func CreateHabit(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllHabits(w http.ResponseWriter, r *http.Request) {
-	claims, ok := r.Context().Value(middleware.ContextKey("claims")).(types.Claims)
+	claims, ok := r.Context().Value(middleware.ContextKey("claims")).(models.Claims)
 
 	if !ok {
 		http.Error(w, "invalid token", http.StatusBadRequest)
@@ -59,7 +59,7 @@ func GetAllHabits(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteHabit(w http.ResponseWriter, r *http.Request) {
-	claims, ok := r.Context().Value(middleware.ContextKey("claims")).(types.Claims)
+	claims, ok := r.Context().Value(middleware.ContextKey("claims")).(models.Claims)
 
 	if !ok {
 		http.Error(w, "invalid token", http.StatusBadRequest)
@@ -74,7 +74,7 @@ func DeleteHabit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := service.DeleteHabit(id, claims.ID); err != nil {
+	if _, err := service.DeleteHabit(id, claims.ID); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

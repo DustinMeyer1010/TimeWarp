@@ -2,15 +2,15 @@ package service
 
 import (
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 )
 
-func CreateHabit(habit types.Habit, claims types.Claims) error {
+func CreateHabit(habit models.Habit, claims models.Claims) (int, error) {
 	habit.AccountID = claims.ID
 
-	return db.CreateHabit(habit)
+	return db.CreateHabitWithTime(habit)
 }
 
-func DeleteHabit(id int, account_id int) error {
-	return db.DeleteHabit(id, account_id)
+func DeleteHabit(id int, account_id int) (db.DeletedHabit, error) {
+	return db.DeleteHabitWithTime(id, account_id)
 }

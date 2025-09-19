@@ -2,9 +2,9 @@
 
 CREATE TABLE IF NOT EXISTS habits_with_time (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    description TEXT,
-    completion_time INTERVAL NOT NULL,
+    "name" VARCHAR(50) NOT NULL CHECK ("name" <> ''),
+    "description" TEXT,
+    completion_time INTERVAL NOT NULL CHECK (completion_time >= INTERVAL '10 minutes'),
     account_id INTEGER NOT NULL REFERENCES account(id) ON DELETE CASCADE
 );
 
@@ -21,14 +21,14 @@ CREATE TABLE IF NOT EXISTS habits_with_time_completed (
     completion_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
-CREATE TABLE IF NOT EXISTS habit_single (
+CREATE TABLE IF NOT EXISTS habits_without_time (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    description TEXT,
+    "name" VARCHAR(50) NOT NULL CHECK ("name" <> ''),
+    "description" TEXT,
     account_id INTEGER NOT NULL REFERENCES account(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS habits_single_completed (
+CREATE TABLE IF NOT EXISTS habits_without_time_completed (
     id SERIAL PRIMARY KEY,
     habit_id INT NOT NULL REFERENCES habits_with_time(id) ON DELETE CASCADE,
     completion_date DATE NOT NULL DEFAULT CURRENT_DATE

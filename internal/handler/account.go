@@ -6,20 +6,20 @@ import (
 	"strconv"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/middleware"
+	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 	"github.com/DustinMeyer1010/TimeWarp/internal/service"
-	"github.com/DustinMeyer1010/TimeWarp/internal/types"
 	"github.com/gorilla/mux"
 )
 
 func CreateAccount(w http.ResponseWriter, r *http.Request) {
-	var account types.Account
+	var account models.Account
 
 	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
 		http.Error(w, "unable to parse body", http.StatusBadRequest)
 		return
 	}
 
-	if err := service.CreateAccount(account); err != nil {
+	if _, err := service.CreateAccount(account); err != nil {
 		http.Error(w, "Failed to add to db", http.StatusBadRequest)
 		return
 	}
@@ -29,7 +29,7 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteAccount(w http.ResponseWriter, r *http.Request) {
-	claims, ok := r.Context().Value(middleware.ContextKey("claims")).(types.Claims)
+	claims, ok := r.Context().Value(middleware.ContextKey("claims")).(models.Claims)
 
 	if !ok {
 		http.Error(w, "invalid token", http.StatusBadRequest)
@@ -43,7 +43,7 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := service.DeleteAccount(id, claims.Username); err != nil {
+	if _, err := service.DeleteAccount(id, claims.Username); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
