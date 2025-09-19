@@ -27,26 +27,15 @@ func GetAccountByUsername(username string) (types.Account, error) {
 	return account, nil
 }
 
+// Pulls account with the id given
 func GetAccountByID(id int) (types.Account, error) {
 	var account types.Account
 
-	row := pool.QueryRow(
+	err := pool.QueryRow(
 		context.Background(),
 		"SELECT id, username, email, password, creation_date FROM account WHERE id = $1",
 		id,
-	)
+	).Scan(&account.ID, &account.Username, &account.Email, &account.Password, &account.CreationDate)
 
-	err := row.Scan(
-		&account.ID,
-		&account.Username,
-		&account.Email,
-		&account.Password,
-		&account.CreationDate,
-	)
-
-	if err != nil {
-		return types.Account{}, err
-	}
-
-	return account, nil
+	return account, err
 }

@@ -9,6 +9,7 @@ import (
 )
 
 func habitRoutes(router *mux.Router) {
+
 	router.Handle("/habit",
 		middleware.ChainMiddleware(
 			http.HandlerFunc(handler.CreateHabit),

@@ -7,11 +7,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateAccount(t *testing.T) {
+// Create Account (Valid)
+func TestCA(t *testing.T) {
+	t.Logf("%s: Create Account", t.Name())
 	var account types.Account = types.Account{
-		Username: "test_valid_account_created",
+		Username: "TestCA",
 		Password: "123",
-		Email:    "single@account.com",
+		Email:    "test@CA.com",
 	}
 	id, err := CreateAccount(account)
 
@@ -19,9 +21,11 @@ func TestCreateAccount(t *testing.T) {
 	assertAccountExist(t, id)
 }
 
-func TestCreateAccountMissingEmail(t *testing.T) {
+// Create Account Missing Email (invalid)
+func TestCAME(t *testing.T) {
+	t.Logf("%s: Create Account Missing Email", t.Name())
 	var account types.Account = types.Account{
-		Username: "test_missing_email",
+		Username: "TestCAME",
 		Password: "123",
 		Email:    "",
 	}
@@ -34,11 +38,13 @@ func TestCreateAccountMissingEmail(t *testing.T) {
 
 }
 
-func TestCreateAccountInvalidEmail(t *testing.T) {
+// Create Account Invalid Email (invalid)
+func TestCAIE(t *testing.T) {
+	t.Logf("%s: Create Account Invalid Email", t.Name())
 	var account types.Account = types.Account{
-		Username: "test_invalid_email",
+		Username: "TestCAIE",
 		Password: "123",
-		Email:    "local@test",
+		Email:    "test@CAIE",
 	}
 
 	id, err := CreateAccount(account)
@@ -50,17 +56,19 @@ func TestCreateAccountInvalidEmail(t *testing.T) {
 
 }
 
-func TestCreateAccountSameEmail(t *testing.T) {
+// Create Account Same Email
+func TestCASE(t *testing.T) {
+	t.Logf("%s: Create Account Same Email", t.Name())
 	var account types.Account = types.Account{
-		Username: "test_valid_account",
+		Username: "TestCASE",
 		Password: "123",
-		Email:    "same@email.com",
+		Email:    "test@CASE.com",
 	}
 
 	var account1 types.Account = types.Account{
-		Username: "test_invalid_email_exist",
+		Username: "TestCASE1",
 		Password: "123",
-		Email:    "same@email.com",
+		Email:    "test@CASE.com",
 	}
 
 	id, err := CreateAccount(account)
@@ -75,18 +83,20 @@ func TestCreateAccountSameEmail(t *testing.T) {
 	assertAccountDoesNotExistUsername(t, account1.Username)
 }
 
-func TestCreateTwoDifferentAccounts(t *testing.T) {
+// Create Two Different Accounts (valid)
+func TestCTDA(t *testing.T) {
+	t.Logf("%s: Create Two Different Accounts", t.Name())
 	var account types.Account = types.Account{
-		Username:     "test_valid1",
+		Username:     "TestCTDA",
 		Password:     "123",
-		Email:        "wow@test.com",
+		Email:        "test@CTDA.com",
 		RefreshToken: "",
 	}
 
 	var account1 types.Account = types.Account{
-		Username:     "test_valid2",
+		Username:     "TestCTDA1",
 		Password:     "123",
-		Email:        "bob@test1.com",
+		Email:        "test@CTDA1.com",
 		RefreshToken: "",
 	}
 
@@ -101,11 +111,13 @@ func TestCreateTwoDifferentAccounts(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestCreateAccountMissingUsername(t *testing.T) {
+// Create Account Missing Username (invalid)
+func TestCAMU(t *testing.T) {
+	t.Logf("%s: Create Account Missing Username", t.Name())
 	var account types.Account = types.Account{
 		Username:     "",
 		Password:     "123",
-		Email:        "Missing@Username.com",
+		Email:        "test@CAMU.com",
 		RefreshToken: "",
 	}
 

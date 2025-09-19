@@ -7,11 +7,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDeleteAccountByIdExist(t *testing.T) {
+// Delete Account By ID (Account Exists | Valid)
+func TestDABI(t *testing.T) {
+	t.Logf("%s: Delete Account By ID", t.Name())
 	var account types.Account = types.Account{
-		Username: "test_valid_id_to_be_deleted",
+		Username: "TestDABI",
 		Password: "123",
-		Email:    "valid@account1tobedeleted.com",
+		Email:    "test@DABI.com",
 	}
 
 	id, err := CreateAccount(account)
@@ -26,4 +28,25 @@ func TestDeleteAccountByIdExist(t *testing.T) {
 
 	assertAccountDoesNotExistId(t, id)
 
+}
+
+// Delete Account By Username (Account Exists | Valid)
+func TestDABU(t *testing.T) {
+	t.Logf("%s: Delete Account By Username", t.Name())
+	var account types.Account = types.Account{
+		Username: "TestDABU",
+		Password: "123",
+		Email:    "Test@DABU.com",
+	}
+
+	id, err := CreateAccount(account)
+
+	assert.NoError(t, err)
+	assertAccountExist(t, id)
+
+	returnedId, err := DeleteAccountByUsername(account.Username)
+
+	assert.NoError(t, err)
+	assert.Equal(t, returnedId, id)
+	assertAccountDoesNotExistId(t, id)
 }

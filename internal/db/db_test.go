@@ -43,15 +43,14 @@ func TestMain(m *testing.M) {
 
 	if err != nil {
 		fmt.Println(err)
-		panic("unable to test without account creation")
+		os.Exit(1)
 	}
 	Account2.ID, err = CreateAccount(Account2)
 
 	if err != nil {
-		panic("unable to test without account creation")
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
-	fmt.Println(Account1.ID)
 
 	code := m.Run()
 
@@ -66,7 +65,6 @@ func TestMain(m *testing.M) {
 func assertAccountsAreEqual(t *testing.T, account1 types.Account, account2 types.Account) {
 	assert.Equal(t, account1.Email, account2.Email)
 	assert.Equal(t, account1.Username, account2.Username)
-	fmt.Println(account1.Password, account2.Password)
 	assert.True(t, account1.CheckPassword(account2))
 }
 

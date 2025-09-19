@@ -8,7 +8,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetHabitWithTime(t *testing.T) {
+// Get Habit With Time Created
+func TestGHWTC(t *testing.T) {
+	t.Logf("%s: Get Habit With Time Created", t.Name())
 
 	var habit types.Habit = types.Habit{
 		Name:           "Test",
@@ -28,47 +30,9 @@ func TestGetHabitWithTime(t *testing.T) {
 	assertHabitsAreEqual(t, returnedHabit, habit)
 }
 
-func TestGetHabitWithTimeNotExist(t *testing.T) {
-	DeleteHabitWithTime(1, Account1.ID) // Make sure there is no habit that exist with this habit
-
-	habit, err := GetHabitWithTime(1, Account1.ID)
-
-	assert.Error(t, err)
-	assertHabitIsEmpty(t, habit)
-
-}
-
-func TestGetHabitWithoutTimeNotExist(t *testing.T) {
-	DeleteHabitWithoutTime(1, Account1.ID)
-
-	habit, err := GetHabitWithoutTime(1, Account1.ID)
-
-	assert.Error(t, err)
-	assertHabitIsEmpty(t, habit)
-
-}
-
-func TestGetHabitWithTimeExist(t *testing.T) {
-	var habit types.Habit = types.Habit{
-		Name:           "Test",
-		Description:    "This is a valid habit",
-		AccountID:      Account1.ID,
-		CompletionTime: types.Duration{Duration: time.Hour * 1},
-	}
-
-	id, err := CreateHabitWithTime(habit)
-
-	assert.NotEqual(t, id, -1)
-	assert.NoError(t, err)
-
-	returnedHabit, err := GetHabitWithTime(id, habit.AccountID)
-
-	assert.NoError(t, err)
-	assertHabitsAreEqual(t, returnedHabit, habit)
-
-}
-
-func TestGetHabitWithoutTimeExist(t *testing.T) {
+// Get Habit Without Time Created
+func TestGHWOTC(t *testing.T) {
+	t.Logf("%s: Get Habit Without Time Not Created", t.Name())
 	var habit types.Habit = types.Habit{
 		Name:        "Test",
 		Description: "This is a valid habit",
@@ -87,7 +51,33 @@ func TestGetHabitWithoutTimeExist(t *testing.T) {
 
 }
 
-func TestGetHabitWithTimeIDAndAccountNoMatch(t *testing.T) {
+// Get Habit With Time Not Created
+func TestGHWTNC(t *testing.T) {
+	t.Logf("%s: Get Habit With Time Not Created", t.Name())
+	DeleteHabitWithTime(1, Account1.ID) // Make sure there is no habit that exist with this habit
+
+	habit, err := GetHabitWithTime(1, Account1.ID)
+
+	assert.Error(t, err)
+	assertHabitIsEmpty(t, habit)
+
+}
+
+// Get Habit Without Time Not Created
+func TestGHWOTNC(t *testing.T) {
+	t.Logf("%s: Get Habit Without Time Not Created", t.Name())
+	DeleteHabitWithoutTime(1, Account1.ID)
+
+	habit, err := GetHabitWithoutTime(1, Account1.ID)
+
+	assert.Error(t, err)
+	assertHabitIsEmpty(t, habit)
+
+}
+
+// Get Habit With Time Id And Account Not Matching
+func TestGHWTIAANM(t *testing.T) {
+	t.Logf("%s: Get Habit With Time Id And Account Not Matching", t.Name())
 	var habit types.Habit = types.Habit{
 		Name:           "Test",
 		Description:    "This is a valid habit",
@@ -107,7 +97,9 @@ func TestGetHabitWithTimeIDAndAccountNoMatch(t *testing.T) {
 
 }
 
-func TestGetHabitWithoutTimeIDandAccountNoMatch(t *testing.T) {
+// Get Habit Without Time Id And Account Not Matching
+func TestGHWOTIAANM(t *testing.T) {
+	t.Logf("%s: Get Habit With Time Id And Account Not Matching", t.Name())
 	var habit types.Habit = types.Habit{
 		Name:        "Test",
 		Description: "This is a valid habit",

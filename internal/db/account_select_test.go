@@ -7,11 +7,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetAccountByIDExist(t *testing.T) {
+// Get Account By Id Exists
+func TestGABIE(t *testing.T) {
+	t.Logf("%s: Get Account By Id Exists", t.Name())
 	var account types.Account = types.Account{
-		Username: "test_valid_id",
+		Username: "TestGABIE",
 		Password: "123",
-		Email:    "valid@account1.com",
+		Email:    "test@GABIE.com",
 	}
 
 	id, err := CreateAccount(account)
@@ -26,7 +28,9 @@ func TestGetAccountByIDExist(t *testing.T) {
 
 }
 
-func TestGetAccountByIDNotExist(t *testing.T) {
+// Get Account By Id Not Exist
+func TestGABINE(t *testing.T) {
+	t.Logf("%s: Get Account By Id Not Exist", t.Name())
 	DeleteAccountById(1)
 
 	returnedAccount, err := GetAccountByID(1)

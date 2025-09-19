@@ -7,7 +7,7 @@ func DeleteAccountByUsername(username string) (int, error) {
 
 	err := pool.QueryRow(
 		context.Background(),
-		"DELETE FROM account WHERE username=$1",
+		"DELETE FROM account WHERE username=$1 RETURNING id",
 		username,
 	).Scan(&accountID)
 

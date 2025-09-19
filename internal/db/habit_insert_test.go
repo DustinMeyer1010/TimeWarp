@@ -8,7 +8,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateHabitWithTimeValid(t *testing.T) {
+// Create Habit With Time
+func TestCHWT(t *testing.T) {
+	t.Logf("%s: Create Habit With Time", t.Name())
 	var habit types.Habit = types.Habit{
 		Name:           "Test",
 		Description:    "This is a valid habit",
@@ -22,7 +24,9 @@ func TestCreateHabitWithTimeValid(t *testing.T) {
 	assert.NotEqual(t, id, -1)
 }
 
-func TestCreateSameHabitTwiceValid(t *testing.T) {
+// Create Same Habit Twice
+func TestCSHT(t *testing.T) {
+	t.Logf("%s: Create Same Habit Twice", t.Name())
 	var habit types.Habit = types.Habit{
 		Name:           "TwoHabits",
 		Description:    "This is a valid habit",
@@ -41,7 +45,9 @@ func TestCreateSameHabitTwiceValid(t *testing.T) {
 	assert.NotEqual(t, id, id2)
 }
 
-func TestCreateHabitWithoutTime(t *testing.T) {
+// Create Habit Without Time
+func TestCHWOT(t *testing.T) {
+	t.Logf("%s: Create Same Habit Twice", t.Name())
 	var habit types.Habit = types.Habit{
 		Name:        "TwoHabits",
 		Description: "This is a valid habit",

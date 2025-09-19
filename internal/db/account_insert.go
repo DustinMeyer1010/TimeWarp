@@ -20,7 +20,7 @@ import (
 //   - id: The ID of the newly created account, or -1 if the creation failed.
 //   - err: An error describing why the account could not be created, or nil if successful.
 func CreateAccount(account types.Account) (id int, err error) {
-
+	id = -1
 	err = account.EncryptPassword()
 
 	if err != nil {
@@ -34,10 +34,6 @@ func CreateAccount(account types.Account) (id int, err error) {
 		RETURNING id`,
 		account.Username, account.Password, account.Email, time.Now(),
 	).Scan(&id)
-
-	if err != nil {
-		return -1, err
-	}
 
 	return
 }
