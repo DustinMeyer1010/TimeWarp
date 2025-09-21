@@ -2,10 +2,8 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/DustinMeyer1010/TimeWarp/internal/db"
 	"github.com/DustinMeyer1010/TimeWarp/internal/middleware"
@@ -59,13 +57,8 @@ func GetAllHabits(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func DeleteHabit(w http.ResponseWriter, r *http.Request) {
-	claims, ok := r.Context().Value(middleware.ContextKey("claims")).(models.Claims)
-
-	if !ok {
-		http.Error(w, "invalid token", http.StatusBadRequest)
-		return
-	}
+func DeleteHabitWithTime(w http.ResponseWriter, r *http.Request) {
+	claims, _ := r.Context().Value(middleware.ContextKey("claims")).(models.Claims)
 
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
@@ -75,7 +68,7 @@ func DeleteHabit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, err := service.DeleteHabit(id, claims.ID); err != nil {
+	if _, err := service.DeleteHabitWithTime(id, claims.ID); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -84,10 +77,22 @@ func DeleteHabit(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func TEST(w http.ResponseWriter, r *http.Request) {
-	now := time.Now()
-	fmt.Println("here")
+func DeleteHabitWithouttime(w http.ResponseWriter, r *http.Request) {
+	claims, _ := r.Context().Value(middleware.ContextKey("claims")).(models.Claims)
 
-	db.UpdateCompletion(1, now)
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+
+	if err != nil {
+		http.Error(w, "invalid habit id", http.StatusBadRequest)
+		return
+	}
+
+	if _, err := service.DeleteHabitWithoutTime(id, claims.ID); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 
 }
