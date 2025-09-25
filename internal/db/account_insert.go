@@ -38,6 +38,26 @@ func CreateAccount(account models.Account) (id int, err error) {
 	return
 }
 
+// AddRefreshToken updates the refresh token for a specific account in the database.
+//
+// It executes an SQL UPDATE statement on the `account` table, setting the `refresh_token`
+// field to the provided value for the account with the given ID.
+//
+// Parameters:
+//   - id: the unique identifier of the account to update.
+//   - refreshToken: the new refresh token string to be stored.
+//
+// Returns:
+//   - error: returns an error if the update operation fails; otherwise, returns nil.
+//
+// Example:
+//
+//	err := AddRefreshToken(123, "new-refresh-token")
+//	if err != nil {
+//	    log.Printf("Failed to update refresh token: %v", err)
+//	} else {
+//	    log.Println("Refresh token updated successfully")
+//	}
 func AddRefreshToken(id int, refreshToken string) error {
 
 	_, err := pool.Exec(

@@ -85,21 +85,22 @@ func DeleteHabitWithTime(habitId int, accountId int) (DeletedHabit, error) {
 //   - error: An error if the deletion fails; otherwise, nil.
 //
 // Behavior:
-//   This function executes a SQL DELETE statement that targets a limited number of
-//   completion records matching the habit ID and date. It uses a subquery to select
-//   the oldest matching records (ordered by ID ascending) and deletes up to the
-//   specified limit.
+//
+//	This function executes a SQL DELETE statement that targets a limited number of
+//	completion records matching the habit ID and date. It uses a subquery to select
+//	the oldest matching records (ordered by ID ascending) and deletes up to the
+//	specified limit.
 //
 // Notes:
 //   - The `RETURNING id` clause is included but its result is not used.
 //   - If no matching records are found, the function returns nil (no error).
 //
 // Example:
-//   err := DeleteExtraHabitCompletion(101, time.Now(), 2)
-//   if err != nil {
-//       log.Printf("Failed to delete extra completions: %v", err)
-//   }
-
+//
+//	err := DeleteExtraHabitCompletion(101, time.Now(), 2)
+//	if err != nil {
+//	    log.Printf("Failed to delete extra completions: %v", err)
+//	}
 func DeleteExtraHabitCompletion(habitID int, date time.Time, extraCompletionCount int) error {
 	_, err := pool.Exec(
 		context.Background(),

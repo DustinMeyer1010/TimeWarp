@@ -6,8 +6,27 @@ import (
 	"github.com/DustinMeyer1010/TimeWarp/internal/models"
 )
 
-// Returns account ID, Username, Password for account matching username
-// If account not found returns empty account with error
+// GetAccountByUsername retrieves an account from the database that matches the provided username.
+//
+// It performs a SQL SELECT query on the `account` table to fetch the `id`, `username`, and `password`
+// fields for the account with the specified username. The result is scanned into a `models.Account`
+// struct and returned.
+//
+// Parameters:
+//   - username: the username of the account to retrieve.
+//
+// Returns:
+//   - models.Account: a populated account struct if found; otherwise, an empty account struct.
+//   - error: an error object if the query fails or no account is found.
+//
+// Example:
+//
+//	account, err := GetAccountByUsername("johndoe")
+//	if err != nil {
+//	    log.Printf("Account not found or error occurred: %v", err)
+//	} else {
+//	    log.Printf("Account ID: %d, Username: %s", account.ID, account.Username)
+//	}
 func GetAccountByUsername(username string) (models.Account, error) {
 
 	var account models.Account
@@ -27,7 +46,27 @@ func GetAccountByUsername(username string) (models.Account, error) {
 	return account, nil
 }
 
-// Pulls account with the id given
+// GetAccountByID retrieves an account from the database using the provided account ID.
+//
+// It performs a SQL SELECT query on the `account` table to fetch the fields: `id`, `username`,
+// `email`, `password`, and `creation_date` for the account with the specified ID. The result is
+// scanned into a `models.Account` struct and returned.
+//
+// Parameters:
+//   - id: the unique identifier of the account to retrieve.
+//
+// Returns:
+//   - models.Account: a populated account struct containing the account details.
+//   - error: an error object if the query fails or no account is found.
+//
+// Example:
+//
+//	account, err := GetAccountByID(123)
+//	if err != nil {
+//	    log.Printf("Failed to retrieve account: %v", err)
+//	} else {
+//	    log.Printf("Account retrieved: %+v", account)
+//	}
 func GetAccountByID(id int) (models.Account, error) {
 	var account models.Account
 
