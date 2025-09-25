@@ -24,12 +24,16 @@ func habitRoutes(router *mux.Router) {
 			middleware.VerifyIDWithToken,
 		)).Methods("GET")
 
-	router.Handle("/habit/{id}",
+	router.Handle("/habit/time/{id}",
 		middleware.ChainMiddleware(
-			http.HandlerFunc(handler.DeleteHabit),
+			http.HandlerFunc(handler.DeleteHabitWithTime),
 			middleware.Authorization,
 		)).Methods("DELETE")
 
-	router.HandleFunc("/habit/test", handler.TEST)
+	router.Handle("/habit/{id}",
+		middleware.ChainMiddleware(
+			http.HandlerFunc(handler.DeleteHabitWithouttime),
+			middleware.Authorization,
+		)).Methods("DELETE")
 
 }

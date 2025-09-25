@@ -11,6 +11,10 @@ func CreateHabit(habit models.Habit, claims models.Claims) (int, error) {
 	return db.CreateHabitWithTime(habit)
 }
 
-func DeleteHabit(id int, account_id int) (db.DeletedHabit, error) {
+func DeleteHabitWithTime(id int, account_id int) (db.DeletedHabit, error) {
 	return db.DeleteHabitWithTime(id, account_id)
+}
+
+func DeleteHabitWithoutTime(id int, account_id int) (db.DeletedHabit, error) {
+	return db.DeleteHabitWithoutTime(id, account_id)
 }
