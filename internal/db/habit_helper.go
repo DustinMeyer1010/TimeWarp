@@ -8,13 +8,13 @@ import (
 // Adjust the completion row amount base on updates to time logs and habit
 func UpdateCompletion(habitID int, date time.Time) error {
 
-	timeSpent, err := GetHabitTotalTimeSpent(habitID, date)
+	timeSpent, err := GetHabitWithTimeTotalTimeSpent(habitID, date)
 
 	if err != nil {
 		return err
 	}
 
-	completionTime, err := GetHabitCompletionTime(habitID)
+	completionTime, err := GetHabitWithTimeCompletionTime(habitID)
 
 	if err != nil {
 		return err
@@ -24,7 +24,7 @@ func UpdateCompletion(habitID int, date time.Time) error {
 
 	fmt.Println(newTotalCompletions)
 
-	completionCount, err := GetHabitCompletionCount(habitID, date)
+	completionCount, err := GetHabitWithTimeCompletionCount(habitID, date)
 
 	if err != nil {
 		return err
