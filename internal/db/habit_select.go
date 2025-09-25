@@ -151,7 +151,7 @@ func GetHabitWithTimeCompletionCount(habitID int, date time.Time) (int, error) {
 
 	err := pool.QueryRow(
 		context.Background(),
-		"SELECT CASE COUNT(*) > 0 THEN COUNT(*) ELSE 0 FROM habits_with_time_completed WHERE habit_id = $1 AND DATE(completion_date) = DATE($2)",
+		"SELECT CASE WHEN COUNT(*) > 0 THEN COUNT(*) ELSE 0 END FROM habits_with_time_completed WHERE habit_id = $1 AND DATE(completion_date) = DATE($2)",
 		habitID, date,
 	).Scan(&completionCount)
 
@@ -269,7 +269,7 @@ func GetHabitWithoutTimeCompletionCount(habitID int, date time.Time) (int, error
 
 	err := pool.QueryRow(
 		context.Background(),
-		"SELECT CASE COUNT(*) > 0 THEN COUNT(*) ELSE 0 FROM habits_without_time_completed WHERE habit_id = $1 AND DATE(completion_date) = DATE($2)",
+		"SELECT CASE WHEN COUNT(*) > 0 THEN COUNT(*) ELSE 0 END FROM habits_without_time_completed WHERE habit_id = $1 AND DATE(completion_date) = DATE($2)",
 		habitID, date,
 	).Scan(&completionCount)
 

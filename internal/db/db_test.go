@@ -31,7 +31,7 @@ func TestMain(m *testing.M) {
 	}
 
 	err = dbConfig.Init()
-
+	createAllTables()
 	ClearAllTables()
 
 	if err != nil {

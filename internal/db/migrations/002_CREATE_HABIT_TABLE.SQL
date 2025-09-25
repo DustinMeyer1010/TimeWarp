@@ -30,6 +30,6 @@ CREATE TABLE IF NOT EXISTS habits_without_time (
 
 CREATE TABLE IF NOT EXISTS habits_without_time_completed (
     id SERIAL PRIMARY KEY,
-    habit_id INT NOT NULL REFERENCES habits_with_time(id) ON DELETE CASCADE,
+    habit_id INT NOT NULL REFERENCES habits_without_time(id) ON DELETE CASCADE,
     completion_date DATE NOT NULL DEFAULT CURRENT_DATE
 );

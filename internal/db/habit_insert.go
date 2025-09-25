@@ -119,3 +119,53 @@ func CreateHabitWithoutTime(habit models.Habit) (int, error) {
 
 	return habitID, err
 }
+
+// CreateHabitWithoutTimeCompletion inserts multiple completion records for a habit without time tracking.
+//
+// This function adds one row per completion into the "habits_without_time_completed" table
+// for the specified habit ID and date. The number of rows inserted corresponds to the
+// timesCompleted value.
+//
+// Parameters:
+//   - habitID: The unique identifier of the habit.
+//   - date: The date on which the completions occurred.
+//   - timesCompleted: The number of times the habit was completed on the given date.
+//
+// Returns:
+//   - error: An error if the insert operation fails.
+//
+// Notes:
+//   - The function dynamically builds the SQL INSERT statement with multiple value placeholders.
+//   - Each completion is recorded as a separate row with the same habit ID and date.
+//   - Uses parameterized queries to prevent SQL injection.
+//
+// Example:
+//
+//	err := CreateHabitWithoutTimeCompletion(202, time.Now(), 3)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+func CreateHabitWithoutTimeCompletion(habitID int, date time.Time, timesCompleted int) error {
+	query := "INSERT INTO habits_without_time_completed (habit_id, completion_date) VALUES "
+	placeholders := []string{}
+	args := []any{}
+
+	for i := 1; i <= timesCompleted*2; i += 2 {
+		placeholders = append(placeholders, fmt.Sprintf("($%d, $%d)", i, i+1))
+		args = append(args, habitID, date)
+	}
+
+	query += strings.Join(placeholders, ",")
+
+	_, err := pool.Exec(
+		context.Background(),
+		query,
+		args...,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
